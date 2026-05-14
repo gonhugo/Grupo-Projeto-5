@@ -13,12 +13,12 @@ Comunicação com o servidor.
 ## Perfis
 
 ### Cliente:
-Privilégio - Baixo
+### Privilégio - Baixo
 Login e Registo.
 Quem insere os dados e a viagem/marcação de hotel do seu interesse. Consegue procurar, reservar e consultar viagens assim como cancela-las. 
 
 ### Administrador:
-Privilégio - Alto
+### Privilégio - Alto
 Acede aos Hóteis e insere os mesmos.
 Acede às Viagens e insere as mesmas.
 Gere tudo que envolve dados de utilizadores e reservas.
