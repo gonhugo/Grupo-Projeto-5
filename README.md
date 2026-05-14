@@ -12,18 +12,18 @@ Comunicação com o servidor.
 
 ## Perfis
 
-Cliente:
+### Cliente:
 Privilégio - Baixo
 Login e Registo.
 Quem insere os dados e a viagem/marcação de hotel do seu interesse. Consegue procurar, reservar e consultar viagens assim como cancela-las. 
 
-Administrador:
+### Administrador:
 Privilégio - Alto
 Acede aos Hóteis e insere os mesmos.
 Acede às Viagens e insere as mesmas.
 Gere tudo que envolve dados de utilizadores e reservas.
 
-Mediador:
+### Mediador:
 Privilégio - Médio
 Verifica e atualiza reservas dependendo da disponibilidade do administrador. 
 Concede ao cliente feedback das suas reservas e assegura que as transações foram sucedidas. 
@@ -32,20 +32,19 @@ Recetor de observações e sugestões.
 
 ## Funcionalidades
 
-Cliente:
-Login e registo.
-Pesquisa de interesse.
-Compra de interesse.
-Observação e manipulação da própria reserva.
-Cancelamento da reserva.
+### Cliente
+- Registo e login
+- Pesquisa de hotéis e viagens
+- Reserva de hotéis/viagens
+- Consulta de reservas
 
-Administrador:
-Manipulação de todas as reservas.
-Análise total de todas as reservas efetuadas.
-Poder total sobre o website.
-Cria ofertas, viagens, hoteis.
+### Administrador
+- Gestão de hotéis
+- Gestão de viagens
+- Gestão de utilizadores
+- Gestão de reservas
 
-Mediador:
-Verificação e algumas permissões acerca das reservas.
-Recessão e emissão de feedback.
-Revisão de 
+### Mediador
+- Validação de reservas
+- Atualização de disponibilidade
+- Comunicação entre cliente e administrador
