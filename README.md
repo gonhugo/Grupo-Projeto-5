@@ -24,7 +24,7 @@ O cliente final regista-se e faz login. Observa e procura as ofertas disponívei
 O administrador insere os hóteis e viagens. Recebe as marcações na base de dados. Agente supremo com permissões para gerir utilizadores, alterar informações de viagem e cancelar ofertas.
 
 ### Marketing:
-### Privilégio - Médio
+## Privilégio - Médio
 O agente de Marketing verifica ofertas e promoções disponibilizadas pelas empresas responsáveis pelos serviços (hóteis e viagens) e ajusta diretamente os preços de alojamento. 
 
 ## Funcionalidades
