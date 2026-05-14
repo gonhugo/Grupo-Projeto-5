@@ -4,31 +4,28 @@ DEAPC Grupo Projeto 5
 ## Objetivos
 Gestão, reserva de viagens e de hoteis. 
 Efetuar marcações, ver preços.
-Implementação de dados dos clientes 
-Recuperação de informação sobre reservas
+Implementação de dados dos clientes. 
 Processo de pagamentos.
 Armazenamento de Dados.
 Comunicação com o servidor.
+Gestão de marketing (ofertas e promoções para viagens e hóteis).
+Acesso a diversas agências de voo internacionais para marcação.
+
 
 ## Perfis
 
 ### Cliente:
-### Privilégio - Baixo
-Login e Registo.
-Quem insere os dados e a viagem/marcação de hotel do seu interesse. Consegue procurar, reservar e consultar viagens assim como cancela-las. 
+## Privilégio - Baixo
+O cliente final regista-se e faz login. Observa e procura as ofertas disponíveis e efetua marcações/reservas do seu interesse. Envia sugestões aos agentes superiores. Review de ofertas propostas (0-5 estrelas) e comentário.
+
 
 ### Administrador:
-### Privilégio - Alto
-Acede aos Hóteis e insere os mesmos.
-Acede às Viagens e insere as mesmas.
-Gere tudo que envolve dados de utilizadores e reservas.
+## Privilégio - Alto
+O administrador insere os hóteis e viagens. Recebe as marcações na base de dados. Agente supremo com permissões para gerir utilizadores, alterar informações de viagem e cancelar ofertas.
 
-### Mediador:
+### Marketing:
 ### Privilégio - Médio
-Verifica e atualiza reservas dependendo da disponibilidade do administrador. 
-Concede ao cliente feedback das suas reservas e assegura que as transações foram sucedidas. 
-Revê preços e informa o(s) administrador(es).
-Recetor de observações e sugestões.
+O agente de Marketing verifica ofertas e promoções disponibilizadas pelas empresas responsáveis pelos serviços (hóteis e viagens) e ajusta diretamente os preços de alojamento. 
 
 ## Funcionalidades
 
@@ -38,13 +35,15 @@ Recetor de observações e sugestões.
 - Reserva de hotéis/viagens
 - Consulta de reservas
 
+
 ### Administrador
 - Gestão de hotéis
 - Gestão de viagens
 - Gestão de utilizadores
 - Gestão de reservas
+  
 
-### Mediador
-- Validação de reservas
-- Atualização de disponibilidade
-- Comunicação entre cliente e administrador
+### Agente de Marketing
+- Validação de preços
+- Atualização direta de preços com base nas ofertas e promoções disponíveis.
+- Incrementação de imposto nas transações.
