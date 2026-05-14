@@ -24,7 +24,7 @@ Acede às Viagens e insere as mesmas.
 Gere tudo que envolve dados de utilizadores e reservas.
 
 ### Mediador:
-Privilégio - Médio
+### Privilégio - Médio
 Verifica e atualiza reservas dependendo da disponibilidade do administrador. 
 Concede ao cliente feedback das suas reservas e assegura que as transações foram sucedidas. 
 Revê preços e informa o(s) administrador(es).
