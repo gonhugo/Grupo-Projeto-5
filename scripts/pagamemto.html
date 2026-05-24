@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento e Detalhes - HS Hotels</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #f4f6f9; padding: 20px; color: #333; }
+        
+        .container-pagamento {
+            max-width: 800px; margin: 0 auto; background: white; padding: 30px;
+            border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-pagamento { text-align: center; margin-bottom: 25px; }
+        .header-pagamento img { max-width: 180px; margin-bottom: 15px;}
+
+        h2, h3 { color: #000; margin-bottom: 15px; }
+        .detalhes-produto { border-bottom: 2px solid #f4f6f9; padding-bottom: 20px; margin-bottom: 20px; }
+        .preco-final { color: #ff1e00; font-size: 24px; font-weight: bold; margin-top: 10px; }
+
+        /* Métodos de Pagamento */
+        .metodos-pagamento { margin-bottom: 25px; }
+        .opcao-pagamento {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+            padding: 12px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;
+        }
+
+        /* Comentários e Avaliação */
+        .seccao-comentarios { background: #f9f9f9; padding: 20px; border-radius: 6px; margin-bottom: 25px; }
+        .comentario-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
+        .comentario-item:last-child { border: none; }
+        .estrelas { color: #ffcc00; font-size: 16px; margin-bottom: 5px; }
+
+        .novo-comentario textarea {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;
+            height: 80px; resize: none; margin-top: 10px;
+        }
+
+        /* Botões de Ação */
+        .botoes-container { display: flex; gap: 15px; margin-top: 20px; }
+        .btn-pagar {
+            flex: 2; background-color: #ff1e00; color: white; border: none;
+            padding: 14px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer;
+        }
+        .btn-pagar:hover { background-color: #c00808; }
+        .btn-cancelar {
+            flex: 1; background-color: #ccc; color: #333; border: none;
+            padding: 14px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer;
+            text-align: center; text-decoration: none;
+        }
+        .btn-cancelar:hover { background-color: #b5b5b5; }
+    </style>
+</head>
+<body>
+
+<div class="container-pagamento">
+    <div class="header-pagamento">
+        <img src="Untitled.jpg" alt="Logótipo HS Hotels">
+        <h2>Resumo da Reserva / Pagamento</h2>
+    </div>
+
+    <div class="detalhes-produto">
+        <h3>Hotel Praia Azul</h3>
+        <p><strong>Descrição:</strong> Quarto Duplo Vista Mar - 3 Noites com pequeno almoço incluído.</p>
+        <div class="preco-final">Preço a pagar: 85€</div>
+    </div>
+
+    <div class="seccao-comentarios">
+        <h3>Avaliações de Clientes</h3>
+        <div class="comentario-item">
+            <div class="estrelas">★★★★★</div>
+            <p><strong>Carlos M.</strong> - "Excelente estadia! Pessoal muito atencioso e vista incrível."</p>
+        </div>
+        <div class="comentario-item">
+            <div class="estrelas">★★★★☆</div>
+            <p><strong>Ana R.</strong> - "Muito limpo, o SPA vale mesmo a pena. A repetir."</p>
+        </div>
+
+        <div class="novo-comentario" style="margin-top: 15px;">
+            <label style="font-weight: bold;">Deixe a sua avaliação:</label>
+            <select style="margin-top: 5px; padding: 5px; width: 100px; display: block;">
+                <option>5 Estrelas</option>
+                <option>4 Estrelas</option>
+                <option>3 Estrelas</option>
+                <option>2 Estrelas</option>
+                <option>1 Estrela</option>
+            </select>
+            <textarea placeholder="Escreva aqui o seu comentário..."></textarea>
+        </div>
+    </div>
+
+    <form onsubmit="alert('Pagamento efetuado com sucesso!'); window.location.href='catalogo.html'; return false;">
+        <div class="metodos-pagamento">
+            <h3>Método de Pagamento</h3>
+            <label class="opcao-pagamento">
+                <input type="radio" name="metodo" required> Cartão de Crédito / Débito
+            </label>
+            <label class="opcao-pagamento">
+                <input type="radio" name="metodo"> Referência Multibanco
+            </label>
+            <label class="opcao-pagamento">
+                <input type="radio" name="metodo"> MB WAY
+            </label>
+        </div>
+
+        <div class="botoes-container">
+            <a href="catalogo.html" class="btn-cancelar">Cancelar</a>
+            <button type="submit" class="btn-pagar">Pagar Agora</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
