@@ -7,47 +7,23 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         body { background-color: #f4f6f9; padding: 20px; color: #333; }
-        
         header {
             background: white; padding: 15px 30px; border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; 
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
         }
         .logo-container img { max-width: 150px; height: auto; }
         .nav-links a { color: #ff1e00; text-decoration: none; font-weight: bold; }
-
-        .admin-grid {
-            max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 25px;
-        }
-
+        .admin-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
         @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } }
-
-        .painel-box {
-            background: white; padding: 25px; border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
+        .painel-box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         h2 { margin-bottom: 20px; font-size: 20px; color: #000; border-bottom: 2px solid #f4f6f9; padding-bottom: 10px;}
-        
-        .barra-pesquisa-admin {
-            width: 100%; padding: 10px; margin-bottom: 15px;
-            border: 1px solid #ccc; border-radius: 4px;
-        }
-
-        .btn-add {
-            background-color: #ff1e00; color: white; border: none; padding: 10px 15px;
-            border-radius: 4px; font-weight: bold; cursor: pointer; margin-bottom: 15px;
-        }
+        .btn-add { background-color: #ff1e00; color: white; border: none; padding: 10px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
         .btn-add:hover { background-color: #c00808; }
-
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
         th { background-color: #f8f9fa; font-weight: bold; }
-
-        .btn-remover {
-            background: none; border: none; color: #ff1e00; cursor: pointer; font-weight: bold;
-        }
+        .btn-remover { background: none; border: none; color: #ff1e00; cursor: pointer; font-weight: bold; }
         .btn-remover:hover { text-decoration: underline; }
     </style>
 </head>
@@ -58,67 +34,95 @@
         <img src="Untitled.jpg" alt="Logótipo HS Hotels">
     </div>
     <h2>Olá Administrador</h2>
-    <div class="nav-links">
-        <a href="catalogo.html">Voltar ao Catálogo</a>
-    </div>
+    <div class="nav-links"><a href="catalogo.html">Voltar ao Catálogo</a></div>
 </header>
 
 <div class="admin-grid">
     <div class="painel-box">
         <h2>Lista de Utilizadores</h2>
-        <input type="text" class="barra-pesquisa-admin" placeholder="Procurar utilizador...">
-        <button class="btn-add">+ Adicionar Utilizador</button>
-        
+        <button class="btn-add" onclick="adicionarUtilizador()">+ Adicionar Utilizador</button>
         <table>
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>João Silva</td>
-                    <td>joao@email.com</td>
-                    <td><button class="btn-remover">Remover</button></td>
-                </tr>
-                <tr>
-                    <td>Maria Santos</td>
-                    <td>maria@email.com</td>
-                    <td><button class="btn-remover">Remover</button></td>
-                </tr>
-            </tbody>
+            <thead><tr><th>Nome</th><th>Email</th><th>Ações</th></tr></thead>
+            <tbody id="tabela-utilizadores"></tbody>
         </table>
     </div>
 
     <div class="painel-box">
         <h2>Lista de Ofertas (Catálogo)</h2>
-        <button class="btn-add">+ Adicionar Nova Oferta</button>
-        
+        <button class="btn-add" onclick="adicionarOferta()">+ Adicionar Nova Oferta</button>
         <table>
-            <thead>
-                <tr>
-                    <th>Oferta</th>
-                    <th>Preço Atual</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Hotel Praia Azul</td>
-                    <td>85€</td>
-                    <td><button class="btn-remover">Remover</button></td>
-                </tr>
-                <tr>
-                    <td>Resort Serra Verde</td>
-                    <td>130€</td>
-                    <td><button class="btn-remover">Remover</button></td>
-                </tr>
-            </tbody>
+            <thead><tr><th>Oferta</th><th>Preço</th><th>Ações</th></tr></thead>
+            <tbody id="tabela-ofertas"></tbody>
         </table>
     </div>
 </div>
 
+<script>
+    // Inicializar Utilizadores se não existirem
+    if (!localStorage.getItem('utilizadores')) {
+        const users = [
+            { id: 1, nome: "João Silva", email: "joao@email.com" },
+            { id: 2, nome: "Maria Santos", email: "maria@email.com" }
+        ];
+        localStorage.setItem('utilizadores', JSON.stringify(users));
+    }
+
+    function carregarDados() {
+        // Renderizar Utilizadores
+        const users = JSON.parse(localStorage.getItem('utilizadores'));
+        const tUser = document.getElementById('tabela-utilizadores');
+        tUser.innerHTML = '';
+        users.forEach(u => {
+            tUser.innerHTML += `<tr><td>${u.nome}</td><td>${u.email}</td><td><button class="btn-remover" onclick="removerUtilizador(${u.id})">Remover</button></td></tr>`;
+        });
+
+        // Renderizar Ofertas
+        const ofertas = JSON.parse(localStorage.getItem('ofertas'));
+        const tOfertas = document.getElementById('tabela-ofertas');
+        tOfertas.innerHTML = '';
+        ofertas.forEach(o => {
+            tOfertas.innerHTML += `<tr><td>${o.nome}</td><td>${o.precoNovo}€</td><td><button class="btn-remover" onclick="removerOferta(${o.id})">Remover</button></td></tr>`;
+        });
+    }
+
+    function adicionarUtilizador() {
+        const nome = prompt("Nome do utilizador:");
+        const email = prompt("Email do utilizador:");
+        if(nome && email) {
+            const users = JSON.parse(localStorage.getItem('utilizadores'));
+            users.push({ id: Date.now(), nome, email });
+            localStorage.setItem('utilizadores', JSON.stringify(users));
+            carregarDados();
+        }
+    }
+
+    function removerUtilizador(id) {
+        let users = JSON.parse(localStorage.getItem('utilizadores'));
+        users = users.filter(u => u.id !== id);
+        localStorage.setItem('utilizadores', JSON.stringify(users));
+        carregarDados();
+    }
+
+    function adicionarOferta() {
+        const nome = prompt("Nome da Oferta/Hotel:");
+        const desc = prompt("Descrição:");
+        const preco = prompt("Preço Atual (€):");
+        if(nome && desc && preco) {
+            const ofertas = JSON.parse(localStorage.getItem('ofertas'));
+            ofertas.push({ id: Date.now(), nome, description: desc, precoAntigo: preco, precoNovo: preco });
+            localStorage.setItem('ofertas', JSON.stringify(ofertas));
+            carregarDados();
+        }
+    }
+
+    function removerOferta(id) {
+        let ofertas = JSON.parse(localStorage.getItem('ofertas'));
+        ofertas = ofertas.filter(o => o.id !== id);
+        localStorage.setItem('ofertas', JSON.stringify(ofertas));
+        carregarDados();
+    }
+
+    carregarDados();
+</script>
 </body>
 </html>
