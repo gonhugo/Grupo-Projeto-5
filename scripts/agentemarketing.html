@@ -7,35 +7,21 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         body { background-color: #f4f6f9; padding: 20px; color: #333; }
-        
         header {
             background: white; padding: 15px 30px; border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
         }
         .logo-container img { max-width: 150px; height: auto; }
         .nav-links a { color: #ff1e00; text-decoration: none; font-weight: bold; }
-
-        .container-marketing {
-            max-width: 900px; margin: 0 auto; background: white; padding: 30px;
-            border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
+        .container-marketing { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         h2 { margin-bottom: 10px; color: #000; }
         p.subtitulo { color: #666; margin-bottom: 25px; }
-
         .tabela-marketing { width: 100%; border-collapse: collapse; }
         .tabela-marketing th, .tabela-marketing td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
         .tabela-marketing th { background-color: #f8f9fa; font-weight: bold; }
-
-        .input-preco-marketing {
-            width: 80px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; text-align: center;
-        }
-
-        .btn-atualizar {
-            background-color: #ff1e00; color: white; border: none; padding: 8px 12px;
-            border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px;
-        }
+        .input-preco-marketing { width: 80px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; text-align: center; }
+        .btn-atualizar { background-color: #ff1e00; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; }
         .btn-atualizar:hover { background-color: #c00808; }
     </style>
 </head>
@@ -45,9 +31,7 @@
     <div class="logo-container">
         <img src="Untitled.jpg" alt="Logótipo HS Hotels">
     </div>
-    <div class="nav-links">
-        <a href="catalogo.html">Ir para o Catálogo</a>
-    </div>
+    <div class="nav-links"><a href="catalogo.html">Ir para o Catálogo</a></div>
 </header>
 
 <div class="container-marketing">
@@ -63,22 +47,52 @@
                 <th>Ações</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td><strong>Hotel Praia Azul</strong></td>
-                <td>120€</td>
-                <td><input type="number" class="input-preco-marketing" value="85"> €</td>
-                <td><button class="btn-atualizar" onclick="alert('Preço atualizado para 85€')">Modificar</button></td>
-            </tr>
-            <tr>
-                <td><strong>Resort Serra Verde</strong></td>
-                <td>180€</td>
-                <td><input type="number" class="input-preco-marketing" value="130"> €</td>
-                <td><button class="btn-atualizar" onclick="alert('Preço atualizado para 130€')">Modificar</button></td>
-            </tr>
-        </tbody>
+        <tbody id="lista-marketing">
+            </tbody>
     </table>
 </div>
 
+<script>
+    function carregarTabelaMarketing() {
+        const ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
+        const tbody = document.getElementById('lista-marketing');
+        tbody.innerHTML = '';
+
+        ofertas.forEach(oferta => {
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong>${oferta.nome}</strong></td>
+                    <td>${oferta.precoAntigo}€</td>
+                    <td><input type="number" class="input-preco-marketing" id="input-id-${oferta.id}" value="${oferta.precoNovo}"> €</td>
+                    <td><button class="btn-atualizar" onclick="modificarPreco(${oferta.id})">Modificar</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    function modificarPreco(id) {
+        const novoPrecoValor = parseFloat(document.getElementById(`input-id-${id}`).value);
+        
+        if (!isNaN(novoPrecoValor)) {
+            let ofertas = JSON.parse(localStorage.getItem('ofertas'));
+            
+            // Encontrar o item correto e mudar o valor
+            ofertas = ofertas.map(o => {
+                if(o.id === id) {
+                    o.precoNovo = novoPrecoValor;
+                }
+                return o;
+            });
+
+            localStorage.setItem('ofertas', JSON.stringify(ofertas));
+            alert('Preço atualizado com sucesso no sistema!');
+            carregarTabelaMarketing();
+        } else {
+            alert('Por favor insira um preço válido.');
+        }
+    }
+
+    carregarTabelaMarketing();
+</script>
 </body>
 </html>
