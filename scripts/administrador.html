@@ -23,106 +23,18 @@
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
         th { background-color: #f8f9fa; font-weight: bold; }
-        .btn-remover { background: none; border: none; color: #ff1e00; cursor: pointer; font-weight: bold; }
+        
+        .btn-remover { background: none; border: none; color: #ff1e00; cursor: pointer; font-weight: bold; margin-right: 10px; }
         .btn-remover:hover { text-decoration: underline; }
+        
+        .btn-editar { background: none; border: none; color: #333; cursor: pointer; font-weight: bold; }
+        .btn-editar:hover { text-decoration: underline; color: #000; }
+        
+        .desc-preview { display: block; font-size: 11px; color: #777; margin-top: 4px; max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo-container">
-        <img src="Untitled.jpg" alt="Logótipo HS Hotels">
-    </div>
-    <h2>Olá Administrador</h2>
-    <div class="nav-links"><a href="catalogo.html">Voltar ao Catálogo</a></div>
-</header>
-
-<div class="admin-grid">
-    <div class="painel-box">
-        <h2>Lista de Utilizadores</h2>
-        <button class="btn-add" onclick="adicionarUtilizador()">+ Adicionar Utilizador</button>
-        <table>
-            <thead><tr><th>Nome</th><th>Email</th><th>Ações</th></tr></thead>
-            <tbody id="tabela-utilizadores"></tbody>
-        </table>
-    </div>
-
-    <div class="painel-box">
-        <h2>Lista de Ofertas (Catálogo)</h2>
-        <button class="btn-add" onclick="adicionarOferta()">+ Adicionar Nova Oferta</button>
-        <table>
-            <thead><tr><th>Oferta</th><th>Preço</th><th>Ações</th></tr></thead>
-            <tbody id="tabela-ofertas"></tbody>
-        </table>
-    </div>
-</div>
-
-<script>
-    // Inicializar Utilizadores se não existirem
-    if (!localStorage.getItem('utilizadores')) {
-        const users = [
-            { id: 1, nome: "João Silva", email: "joao@email.com" },
-            { id: 2, nome: "Maria Santos", email: "maria@email.com" }
-        ];
-        localStorage.setItem('utilizadores', JSON.stringify(users));
-    }
-
-    function carregarDados() {
-        // Renderizar Utilizadores
-        const users = JSON.parse(localStorage.getItem('utilizadores'));
-        const tUser = document.getElementById('tabela-utilizadores');
-        tUser.innerHTML = '';
-        users.forEach(u => {
-            tUser.innerHTML += `<tr><td>${u.nome}</td><td>${u.email}</td><td><button class="btn-remover" onclick="removerUtilizador(${u.id})">Remover</button></td></tr>`;
-        });
-
-        // Renderizar Ofertas
-        const ofertas = JSON.parse(localStorage.getItem('ofertas'));
-        const tOfertas = document.getElementById('tabela-ofertas');
-        tOfertas.innerHTML = '';
-        ofertas.forEach(o => {
-            tOfertas.innerHTML += `<tr><td>${o.nome}</td><td>${o.precoNovo}€</td><td><button class="btn-remover" onclick="removerOferta(${o.id})">Remover</button></td></tr>`;
-        });
-    }
-
-    function adicionarUtilizador() {
-        const nome = prompt("Nome do utilizador:");
-        const email = prompt("Email do utilizador:");
-        if(nome && email) {
-            const users = JSON.parse(localStorage.getItem('utilizadores'));
-            users.push({ id: Date.now(), nome, email });
-            localStorage.setItem('utilizadores', JSON.stringify(users));
-            carregarDados();
-        }
-    }
-
-    function removerUtilizador(id) {
-        let users = JSON.parse(localStorage.getItem('utilizadores'));
-        users = users.filter(u => u.id !== id);
-        localStorage.setItem('utilizadores', JSON.stringify(users));
-        carregarDados();
-    }
-
-    function adicionarOferta() {
-        const nome = prompt("Nome da Oferta/Hotel:");
-        const desc = prompt("Descrição:");
-        const preco = prompt("Preço Atual (€):");
-        if(nome && desc && preco) {
-            const ofertas = JSON.parse(localStorage.getItem('ofertas'));
-            ofertas.push({ id: Date.now(), nome, description: desc, precoAntigo: preco, precoNovo: preco });
-            localStorage.setItem('ofertas', JSON.stringify(ofertas));
-            carregarDados();
-        }
-    }
-
-    function removerOferta(id) {
-        let ofertas = JSON.parse(localStorage.getItem('ofertas'));
-        ofertas = ofertas.filter(o => o.id !== id);
-        localStorage.setItem('ofertas', JSON.stringify(ofertas));
-        carregarDados();
-    }
-
-    carregarDados();
-</script>
-</body>
-</html>
+        <img src="Untitled.jpg" alt="Log
