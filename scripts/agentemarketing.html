@@ -3,96 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Marketing - HS Hotels</title>
+    <title>Painel do Agente de Marketing - HS Hotels</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         body { background-color: #f4f6f9; padding: 20px; color: #333; }
         header {
             background: white; padding: 15px 30px; border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; 
             justify-content: space-between; align-items: center; margin-bottom: 25px;
         }
-        .logo-container img { max-width: 150px; height: auto; }
         .nav-links a { color: #ff1e00; text-decoration: none; font-weight: bold; }
-        .container-marketing { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        h2 { margin-bottom: 10px; color: #000; }
-        p.subtitulo { color: #666; margin-bottom: 25px; }
-        .tabela-marketing { width: 100%; border-collapse: collapse; }
-        .tabela-marketing th, .tabela-marketing td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        .tabela-marketing th { background-color: #f8f9fa; font-weight: bold; }
-        .input-preco-marketing { width: 80px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; text-align: center; }
-        .btn-atualizar { background-color: #ff1e00; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .btn-atualizar:hover { background-color: #c00808; }
+        .painel-box { max-width: 900px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        h2 { margin-bottom: 20px; font-size: 20px; color: #000; border-bottom: 2px solid #f4f6f9; padding-bottom: 10px;}
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        th { background-color: #f8f9fa; font-weight: bold; }
+        .preco-antigo { color: #777; text-decoration: line-through; margin-right: 8px; font-size: 12px; }
+        .preco-novo { color: #ff1e00; font-weight: bold; }
+        .btn-modificar { background-color: #333; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-modificar:hover { background-color: #555; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-container">
-        <img src="Untitled.jpg" alt="Logótipo HS Hotels">
-    </div>
-    <div class="nav-links"><a href="catalogo.html">Ir para o Catálogo</a></div>
+    <div style="font-weight: bold; color: #ff1e00; font-size: 24px;">HS Hotels</div>
+    <h2>Olá Agente de Marketing</h2>
+    <div class="nav-links"><a href="catalogo.html">Voltar ao Catálogo</a></div>
 </header>
 
-<div class="container-marketing">
-    <h2>Olá Agente de Marketing</h2>
-    <p class="subtitulo">Gerencie as promoções e altere os preços das ofertas vigentes no sistema abaixo.</p>
-
-    <table class="tabela-marketing">
+<div class="painel-box">
+    <h2>Gestão de Campanhas e Preços</h2>
+    <table>
         <thead>
             <tr>
-                <th>Oferta / Hotel</th>
-                <th>Preço Antigo</th>
-                <th>Novo Preço (€)</th>
-                <th>Ações</th>
+                <th>Hotel / Oferta</th>
+                <th>Preço Atual (Antigo / Novo)</th>
+                <th>Ação</th>
             </tr>
         </thead>
-        <tbody id="lista-marketing">
-            </tbody>
+        <tbody id="tabela-marketing"></tbody>
     </table>
 </div>
 
 <script>
-    function carregarTabelaMarketing() {
-        const ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
-        const tbody = document.getElementById('lista-marketing');
-        tbody.innerHTML = '';
+    function carregarDadosMarketing() {
+        var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
+        var tabela = document.getElementById('tabela-marketing');
+        
+        if (!tabela) return;
+        tabela.innerHTML = '';
 
-        ofertas.forEach(oferta => {
-            tbody.innerHTML += `
+        ofertas.forEach(function(o) {
+            // Se o preço antigo for igual ao novo, não vale a pena mostrar o rasurado
+            var textoPreco = '';
+            if (o.precoAntigo && o.precoAntigo !== o.precoNovo) {
+                textoPreco += '<span class="preco-antigo">' + o.precoAntigo + '€</span>';
+            }
+            textoPreco += '<span class="preco-novo">' + o.precoNovo + '€</span>';
+
+            tabela.innerHTML += `
                 <tr>
-                    <td><strong>${oferta.nome}</strong></td>
-                    <td>${oferta.precoAntigo}€</td>
-                    <td><input type="number" class="input-preco-marketing" id="input-id-${oferta.id}" value="${oferta.precoNovo}"> €</td>
-                    <td><button class="btn-atualizar" onclick="modificarPreco(${oferta.id})">Modificar</button></td>
-                </tr>
-            `;
+                    <td><strong>${o.nome}</strong></td>
+                    <td>${textoPreco}</td>
+                    <td><button class="btn-modificar" onclick="alterarPreco(${o.id})">Modificar Preço</button></td>
+                </tr>`;
         });
     }
 
-    function modificarPreco(id) {
-        const novoPrecoValor = parseFloat(document.getElementById(`input-id-${id}`).value);
-        
-        if (!isNaN(novoPrecoValor)) {
-            let ofertas = JSON.parse(localStorage.getItem('ofertas'));
-            
-            // Encontrar o item correto e mudar o valor
-            ofertas = ofertas.map(o => {
-                if(o.id === id) {
-                    o.precoNovo = novoPrecoValor;
-                }
-                return o;
-            });
+    function alterarPreco(id) {
+        var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
+        var oferta = ofertas.find(function(o) { return o.id === id; });
 
-            localStorage.setItem('ofertas', JSON.stringify(ofertas));
-            alert('Preço atualizado com sucesso no sistema!');
-            carregarTabelaMarketing();
-        } else {
-            alert('Por favor insira um preço válido.');
+        if (oferta) {
+            var precoDigitado = prompt("Insira o NOVO preço para " + oferta.nome + " (€):", oferta.precoNovo);
+            
+            if (precoDigitado !== null && precoDigitado.trim() !== "") {
+                var novoPrecoNum = Number(precoDigitado);
+
+                if (!isNaN(novoPrecoNum)) {
+                    // LÓGICA DINÂMICA: O preço que era o "novo" passa a ser o "antigo"
+                    oferta.precoAntigo = oferta.precoNovo; 
+                    
+                    // O novo preço passa a ser o valor que o agente acabou de digitar
+                    oferta.precoNovo = novoPrecoNum;
+
+                    localStorage.setItem('ofertas', JSON.stringify(ofertas));
+                    carregarDadosMarketing();
+                } else {
+                    alert("Por favor, introduza um número válido.");
+                }
+            }
         }
     }
 
-    carregarTabelaMarketing();
+    window.onload = function() {
+        carregarDadosMarketing();
+    };
 </script>
 </body>
 </html>
