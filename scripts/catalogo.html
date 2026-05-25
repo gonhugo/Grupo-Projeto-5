@@ -5,177 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Ofertas - HS Hotels</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f4f6f9;
-            color: #333;
-            padding: 20px;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #f4f6f9; color: #333; padding: 20px; }
         header {
-            background: white;
-            padding: 15px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
+            background: white; padding: 15px 30px; border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 25px;
         }
-
-        .logo-container img {
-            max-width: 150px;
-            height: auto;
-        }
-
-        .nav-links a {
-            color: #ff1e00;
-            text-decoration: none;
-            font-weight: bold;
-            margin-left: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 20px;
-        }
-
-        /* Barra Lateral de Filtros */
-        .filtros {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            height: fit-content;
-        }
-
-        .filtros h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-            border-bottom: 2px solid #f4f6f9;
-            padding-bottom: 8px;
-        }
-
-        .grupo-filtro {
-            margin-bottom: 15px;
-        }
-
-        .grupo-filtro label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .grupo-filtro select, .grupo-filtro input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        /* Área do Catálogo */
-        .conteudo-catalogo {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .barra-pesquisa {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
-
-        .lista-ofertas {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .card-oferta {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .img-placeholder {
-            background: #ddd;
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-weight: bold;
-        }
-
-        .info-oferta {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .info-oferta h4 {
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-
-        .info-oferta p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .precos {
-            margin-top: auto;
-            margin-bottom: 15px;
-        }
-
-        .preco-antigo {
-            text-decoration: line-through;
-            color: #888;
-            font-size: 14px;
-            margin-right: 10px;
-        }
-
-        .preco-novo {
-            color: #ff1e00;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .btn-ver-mais {
-            display: block;
-            text-align: center;
-            background: #ff1e00;
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 4px;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-
-        .btn-ver-mais:hover {
-            background: #c00808;
-        }
+        .logo-container img { max-width: 150px; height: auto; }
+        .nav-links a { color: #ff1e00; text-decoration: none; font-weight: bold; margin-left: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
+        .filtros { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); height: fit-content; }
+        .filtros h3 { margin-bottom: 15px; font-size: 18px; border-bottom: 2px solid #f4f6f9; padding-bottom: 8px; }
+        .grupo-filtro { margin-bottom: 15px; }
+        .grupo-filtro label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; }
+        .grupo-filtro select, .grupo-filtro input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .conteudo-catalogo { display: flex; flex-direction: column; gap: 20px; }
+        .barra-pesquisa { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+        .lista-ofertas { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card-oferta { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .img-placeholder { background: #ddd; height: 160px; display: flex; align-items: center; justify-content: center; color: #666; font-weight: bold; text-align: center; padding: 10px; }
+        .info-oferta { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
+        .info-oferta h4 { margin-bottom: 10px; font-size: 18px; }
+        .info-oferta p { font-size: 14px; color: #666; margin-bottom: 15px; line-height: 1.4; }
+        .precos { margin-top: auto; margin-bottom: 15px; }
+        .preco-antigo { text-decoration: line-through; color: #888; font-size: 14px; margin-right: 10px; }
+        .preco-novo { color: #ff1e00; font-weight: bold; font-size: 20px; }
+        .btn-ver-mais { display: block; text-align: center; background: #ff1e00; color: white; text-decoration: none; padding: 10px; border-radius: 4px; font-weight: bold; }
+        .btn-ver-mais:hover { background: #c00808; }
     </style>
 </head>
 <body>
@@ -186,7 +43,7 @@
     </div>
     <div class="nav-links">
         <a href="administrador.html">Painel Admin</a>
-        <a href="agentemarketing.html">Marketing</a>
+        <a href="agente_marketing.html">Marketing</a>
         <a href="index.html">Sair</a>
     </div>
 </header>
@@ -198,48 +55,52 @@
             <label for="filtro-tipo">Tipo</label>
             <select id="filtro-tipo">
                 <option value="todos">Hotéis e Viagens</option>
-                <option value="hoteis">Apenas Hotéis</option>
-                <option value="viagens">Apenas Viagens</option>
             </select>
-        </div>
-        <div class="grupo-filtro">
-            <label for="filtro-preco">Preço Máximo</label>
-            <input type="number" id="filtro-preco" placeholder="Ex: 200€">
         </div>
     </aside>
 
     <main class="conteudo-catalogo">
         <input type="text" class="barra-pesquisa" placeholder="Pesquisar hotéis, destinos, viagens...">
-        
-        <div class="lista-ofertas">
-            <div class="card-oferta">
-                <div class="img-placeholder">[ Hotel Praia Azul ]</div>
-                <div class="info-oferta">
-                    <h4>Hotel Praia Azul</h4>
-                    <p>Localização fantástica em frente ao mar, inclui pequeno-almoço e acesso ao SPA.</p>
-                    <div class="precos">
-                        <span class="preco-antigo">120€</span>
-                        <span class="preco-novo">85€</span>
-                    </div>
-                    <a href="pagamento.html" class="btn-ver-mais">Ver Oferta</a>
-                </div>
+        <div class="lista-ofertas" id="catalogo-container">
             </div>
-
-            <div class="card-oferta">
-                <div class="img-placeholder">[ Resort Serra Verde ]</div>
-                <div class="info-oferta">
-                    <h4>Resort Serra Verde</h4>
-                    <p>Desconexão total no meio da natureza com trilhos e bungalows totalmente equipados.</p>
-                    <div class="precos">
-                        <span class="preco-antigo">180€</span>
-                        <span class="preco-novo">130€</span>
-                    </div>
-                    <a href="pagamento.html" class="btn-ver-mais">Ver Oferta</a>
-                </div>
-            </div>
-        </div>
     </main>
 </div>
 
+<script>
+    // Inicializar dados padrão se não existirem na memória
+    if (!localStorage.getItem('ofertas')) {
+        const ofertasIniciais = [
+            { id: 1, nome: "Hotel Praia Azul", descricao: "Localização fantástica em frente ao mar, inclui pequeno-almoço.", precoAntigo: 120, precoNovo: 85 },
+            { id: 2, nome: "Resort Serra Verde", descricao: "Desconexão total no meio da natureza com trilhos e bungalows.", precoAntigo: 180, precoNovo: 130 }
+        ];
+        localStorage.setItem('ofertas', JSON.stringify(ofertasIniciais));
+    }
+
+    function renderizarCatálogo() {
+        const ofertas = JSON.parse(localStorage.getItem('ofertas'));
+        const container = document.getElementById('catalogo-container');
+        container.innerHTML = '';
+
+        ofertas.forEach(oferta => {
+            container.innerHTML += `
+                <div class="card-oferta">
+                    <div class="img-placeholder">[ ${oferta.nome} ]</div>
+                    <div class="info-oferta">
+                        <h4>${oferta.nome}</h4>
+                        <p>${oferta.descricao}</p>
+                        <div class="precos">
+                            <span class="preco-antigo">${oferta.precoAntigo}€</span>
+                            <span class="preco-novo">${oferta.precoNovo}€</span>
+                        </div>
+                        <a href="pagamento.html?id=${oferta.id}" class="btn-ver-mais">Ver Oferta</a>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // Executa ao carregar a página
+    renderizarCatálogo();
+</script>
 </body>
 </html>
