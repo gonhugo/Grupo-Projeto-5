@@ -46,6 +46,8 @@
                 <option value="★★★★★">5 Estrelas</option>
                 <option value="★★★★☆">4 Estrelas</option>
                 <option value="★★★☆☆">3 Estrelas</option>
+                <option value="★★☆☆☆">2 Estrelas</option>
+                <option value="★☆☆☆☆">1 Estrela</option>
             </select>
             <textarea id="texto-comentario" placeholder="Escreva aqui o seu comentário..."></textarea>
             <button type="button" class="btn-comentar" onclick="adicionarComentario()">Enviar Comentário</button>
@@ -72,11 +74,13 @@
     const ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
     const ofertaSelecionada = ofertas.find(o => o.id === idOferta) || ofertas[0];
 
-    document.getElementById('detalhes-oferta').innerHTML = `
-        <h3>${ofertaSelecionada.nome}</h3>
-        <p>${ofertaSelecionada.descricao}</p>
-        <div class="preco-final">Preço a pagar: ${ofertaSelecionada.precoNovo}€</div>
-    `;
+    if (ofertaSelecionada) {
+        document.getElementById('detalhes-oferta').innerHTML = `
+            <h3>${ofertaSelecionada.nome}</h3>
+            <p>${ofertaSelecionada.descricao || 'Sem descrição disponível.'}</p>
+            <div class="preco-final">Preço a pagar: ${ofertaSelecionada.precoNovo}€</div>
+        `;
+    }
 
     // Comentários em tempo real salvos por ID de Produto
     const chaveComentários = `comentarios_${idOferta}`;
@@ -87,7 +91,7 @@
     }
 
     function carregarComentarios() {
-        const coms = JSON.parse(localStorage.getItem(chaveComentários));
+        const coms = JSON.parse(localStorage.getItem(chaveComentários)) || [];
         const box = document.getElementById('lista-comentarios');
         box.innerHTML = '';
         coms.forEach(c => {
@@ -99,7 +103,7 @@
         const texto = document.getElementById('texto-comentario').value;
         const estrelas = document.getElementById('nota-estrela').value;
         if(texto.trim() !== '') {
-            const coms = JSON.parse(localStorage.getItem(chaveComentários));
+            const coms = JSON.parse(localStorage.getItem(chaveComentários)) || [];
             coms.push({ estrelas, texto });
             localStorage.setItem(chaveComentários, JSON.stringify(coms));
             document.getElementById('texto-comentario').value = ''; // Limpa a caixa
@@ -107,7 +111,10 @@
         }
     }
 
-    carregarComentarios();
+    // Executa ao carregar a página
+    window.onload = function() {
+        carregarComentarios();
+    };
 </script>
 </body>
 </html>
