@@ -7,50 +7,22 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         body { background-color: #f4f6f9; padding: 20px; color: #333; }
-        
-        .container-pagamento {
-            max-width: 800px; margin: 0 auto; background: white; padding: 30px;
-            border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
+        .container-pagamento { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .header-pagamento { text-align: center; margin-bottom: 25px; }
         .header-pagamento img { max-width: 180px; margin-bottom: 15px;}
-
         h2, h3 { color: #000; margin-bottom: 15px; }
         .detalhes-produto { border-bottom: 2px solid #f4f6f9; padding-bottom: 20px; margin-bottom: 20px; }
         .preco-final { color: #ff1e00; font-size: 24px; font-weight: bold; margin-top: 10px; }
-
-        /* Métodos de Pagamento */
         .metodos-pagamento { margin-bottom: 25px; }
-        .opcao-pagamento {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-            padding: 12px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;
-        }
-
-        /* Comentários e Avaliação */
+        .opcao-pagamento { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding: 12px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; }
         .seccao-comentarios { background: #f9f9f9; padding: 20px; border-radius: 6px; margin-bottom: 25px; }
         .comentario-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
-        .comentario-item:last-child { border: none; }
         .estrelas { color: #ffcc00; font-size: 16px; margin-bottom: 5px; }
-
-        .novo-comentario textarea {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;
-            height: 80px; resize: none; margin-top: 10px;
-        }
-
-        /* Botões de Ação */
+        .novo-comentario textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; height: 80px; resize: none; margin-top: 10px; margin-bottom: 10px; }
+        .btn-comentar { background-color: #333; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .botoes-container { display: flex; gap: 15px; margin-top: 20px; }
-        .btn-pagar {
-            flex: 2; background-color: #ff1e00; color: white; border: none;
-            padding: 14px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer;
-        }
-        .btn-pagar:hover { background-color: #c00808; }
-        .btn-cancelar {
-            flex: 1; background-color: #ccc; color: #333; border: none;
-            padding: 14px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer;
-            text-align: center; text-decoration: none;
-        }
-        .btn-cancelar:hover { background-color: #b5b5b5; }
+        .btn-pagar { flex: 2; background-color: #ff1e00; color: white; border: none; padding: 14px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-cancelar { flex: 1; background-color: #ccc; color: #333; border: none; padding: 14px; border-radius: 4px; font-size: 16px; font-weight: bold; text-align: center; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -61,50 +33,31 @@
         <h2>Resumo da Reserva / Pagamento</h2>
     </div>
 
-    <div class="detalhes-produto">
-        <h3>Hotel Praia Azul</h3>
-        <p><strong>Descrição:</strong> Quarto Duplo Vista Mar - 3 Noites com pequeno almoço incluído.</p>
-        <div class="preco-final">Preço a pagar: 85€</div>
-    </div>
+    <div class="detalhes-produto" id="detalhes-oferta">
+        </div>
 
     <div class="seccao-comentarios">
         <h3>Avaliações de Clientes</h3>
-        <div class="comentario-item">
-            <div class="estrelas">★★★★★</div>
-            <p><strong>Carlos M.</strong> - "Excelente estadia! Pessoal muito atencioso e vista incrível."</p>
-        </div>
-        <div class="comentario-item">
-            <div class="estrelas">★★★★☆</div>
-            <p><strong>Ana R.</strong> - "Muito limpo, o SPA vale mesmo a pena. A repetir."</p>
-        </div>
+        <div id="lista-comentarios"></div>
 
-        <div class="novo-comentario" style="margin-top: 15px;">
+        <div class="novo-comentario">
             <label style="font-weight: bold;">Deixe a sua avaliação:</label>
-            <select style="margin-top: 5px; padding: 5px; width: 100px; display: block;">
-                <option>5 Estrelas</option>
-                <option>4 Estrelas</option>
-                <option>3 Estrelas</option>
-                <option>2 Estrelas</option>
-                <option>1 Estrela</option>
+            <select id="nota-estrela" style="margin-top: 5px; padding: 5px; width: 120px; display: block;">
+                <option value="★★★★★">5 Estrelas</option>
+                <option value="★★★★☆">4 Estrelas</option>
+                <option value="★★★☆☆">3 Estrelas</option>
             </select>
-            <textarea placeholder="Escreva aqui o seu comentário..."></textarea>
+            <textarea id="texto-comentario" placeholder="Escreva aqui o seu comentário..."></textarea>
+            <button type="button" class="btn-comentar" onclick="adicionarComentario()">Enviar Comentário</button>
         </div>
     </div>
 
     <form onsubmit="alert('Pagamento efetuado com sucesso!'); window.location.href='catalogo.html'; return false;">
         <div class="metodos-pagamento">
             <h3>Método de Pagamento</h3>
-            <label class="opcao-pagamento">
-                <input type="radio" name="metodo" required> Cartão de Crédito / Débito
-            </label>
-            <label class="opcao-pagamento">
-                <input type="radio" name="metodo"> Referência Multibanco
-            </label>
-            <label class="opcao-pagamento">
-                <input type="radio" name="metodo"> MB WAY
-            </label>
+            <label class="opcao-pagamento"><input type="radio" name="metodo" required> MB WAY</label>
+            <label class="opcao-pagamento"><input type="radio" name="metodo"> Cartão de Crédito</label>
         </div>
-
         <div class="botoes-container">
             <a href="catalogo.html" class="btn-cancelar">Cancelar</a>
             <button type="submit" class="btn-pagar">Pagar Agora</button>
@@ -112,5 +65,49 @@
     </form>
 </div>
 
+<script>
+    // Carregar dados dinâmicos do produto clicado
+    const params = new URLSearchParams(window.location.search);
+    const idOferta = parseInt(params.get('id')) || 1;
+    const ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
+    const ofertaSelecionada = ofertas.find(o => o.id === idOferta) || ofertas[0];
+
+    document.getElementById('detalhes-oferta').innerHTML = `
+        <h3>${ofertaSelecionada.nome}</h3>
+        <p>${ofertaSelecionada.descricao}</p>
+        <div class="preco-final">Preço a pagar: ${ofertaSelecionada.precoNovo}€</div>
+    `;
+
+    // Comentários em tempo real salvos por ID de Produto
+    const chaveComentários = `comentarios_${idOferta}`;
+    if (!localStorage.getItem(chaveComentários)) {
+        localStorage.setItem(chaveComentários, JSON.stringify([
+            { estrelas: "★★★★★", texto: "Excelente atendimento e muito cómodo." }
+        ]));
+    }
+
+    function carregarComentarios() {
+        const coms = JSON.parse(localStorage.getItem(chaveComentários));
+        const box = document.getElementById('lista-comentarios');
+        box.innerHTML = '';
+        coms.forEach(c => {
+            box.innerHTML += `<div class="comentario-item"><div class="estrelas">${c.estrelas}</div><p>${c.texto}</p></div>`;
+        });
+    }
+
+    function adicionarComentario() {
+        const texto = document.getElementById('texto-comentario').value;
+        const estrelas = document.getElementById('nota-estrela').value;
+        if(texto.trim() !== '') {
+            const coms = JSON.parse(localStorage.getItem(chaveComentários));
+            coms.push({ estrelas, texto });
+            localStorage.setItem(chaveComentários, JSON.stringify(coms));
+            document.getElementById('texto-comentario').value = ''; // Limpa a caixa
+            carregarComentarios(); // Atualiza em tempo real
+        }
+    }
+
+    carregarComentarios();
+</script>
 </body>
 </html>
