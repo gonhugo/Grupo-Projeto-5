@@ -3,30 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bem-vindo - HS Hotels</title>
+    <title>Login & Registo - HS Hotels</title>
     <link rel="stylesheet" href="../styles/styles.css">
+    <style>
+        /* Estilos específicos para alinhar os campos do formulário na perfeição */
+        .campo-grupo {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .campo-grupo label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .campo-grupo input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .alternar-link {
+            display: block;
+            margin-top: 15px;
+            color: #ff1e00;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .alternar-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container-pagamento" style="margin-top: 50px; text-align: center;">
+<div class="container-pagamento" style="max-width: 450px; margin-top: 60px; text-align: center;">
     <div class="header-pagamento">
-        <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels" style="max-width: 200px; margin-bottom: 20px;">
-        <h2>Bem-vindo à HS Hotels</h2>
-        <p style="color: #666; margin-top: 10px;">A sua plataforma de gestão e reservas de hotéis de eleição.</p>
+        <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels" style="max-width: 180px; margin-bottom: 15px;">
     </div>
 
-    <div class="seccao-comentarios" style="background: #fff; border: 1px solid #eee; padding: 30px; border-radius: 8px;">
-        <h3 style="margin-bottom: 20px; color: #333;">Selecione o Painel de Acesso:</h3>
-        
-        <div style="display: flex; flex-direction: column; gap: 15px; max-width: 300px; margin: 0 auto;">
-            <a href="catalogo.html" class="btn-ver" style="padding: 12px; text-decoration: none;">Ver Catálogo de Hotéis</a>
-            <a href="administrador.html" class="btn-ver" style="background-color: #333; padding: 12px; text-decoration: none;">Painel do Administrador</a>
-            <a href="agentemarketing.html" class="btn-ver" style="background-color: #555; padding: 12px; text-decoration: none;">Painel de Marketing</a>
-        </div>
+    <div id="seccao-login" class="seccao-comentarios" style="background: #fff; border: none; padding: 10px 0; margin-bottom: 0;">
+        <h2 style="margin-bottom: 20px;">Iniciar Sessão</h2>
+        <form onsubmit="efetuarLogin(event)">
+            <div class="campo-grupo">
+                <label>Email ou Utilizador:</label>
+                <input type="text" id="login-email" required placeholder="Insira o seu email">
+            </div>
+            <div class="campo-grupo">
+                <label>Palavra-passe (Password):</label>
+                <input type="password" id="login-pass" required placeholder="Insira a sua password">
+            </div>
+            <button type="submit" class="btn-ver" style="border: none; cursor: pointer; padding: 12px;">Entrar</button>
+        </form>
+        <span class="alternar-link" onclick="mostrarRegisto()">Não tem conta? Registe-se aqui</span>
     </div>
 
-    <p style="font-size: 12px; color: #999; margin-top: 30px;">&copy; 2026 HS Hotels. Todos os direitos reservados.</p>
+    <div id="seccao-registo" class="seccao-comentarios" style="background: #fff; border: none; padding: 10px 0; margin-bottom: 0; display: none;">
+        <h2 style="margin-bottom: 20px;">Criar Nova Conta</h2>
+        <form onsubmit="efetuarRegisto(event)">
+            <div class="campo-grupo">
+                <label>Nome Completo:</label>
+                <input type="text" id="registo-nome" required placeholder="Insira o seu nome">
+            </div>
+            <div class="campo-grupo">
+                <label>Email:</label>
+                <input type="email" id="registo-email" required placeholder="Insira o seu email">
+            </div>
+            <div class="campo-grupo">
+                <label>Palavra-passe (Password):</label>
+                <input type="password" id="registo-pass" required placeholder="Crie uma password">
+            </div>
+            <button type="submit" class="btn-ver" style="border: none; cursor: pointer; padding: 12px;">Registar e Entrar</button>
+        </form>
+        <span class="alternar-link" onclick="mostrarLogin()">Já tem conta? Faça Login</span>
+    </div>
 </div>
 
-</body>
-</html>
+<script>
+    // Funções para alternar visualmente entre o formulário de Login e o de Registo
+    function mostrarRegisto() {
+        document.getElementById('seccao-login').style.display = 'none';
+        document.getElementById('seccao-registo').style.display = 'block';
+    }
+
+    function mostrarLogin() {
+        document.getElementById('seccao-registo').style.display = 'none';
+        document.getElementById('seccao-login').style.display = 'block';
+    }
+
+    // Lógica ao clicar em Entrar
+    function efetuarLogin(event) {
+        event.preventDefault();
+        
+        var email = document.getElementById('login-email').value;
+        var pass = document.getElementById('login-pass').value;
+
+        // Se for o administrador do sistema
+        if (email.toLowerCase() === 'admin' || email.toLowerCase() === 'admin@email.com') {
+            alert('Bem-vindo, Administrador!');
+            window.location.href = 'administrador.html';
+        } else {
+            // Utilizador comum vai para o catálogo
+            alert('Login efetuado com sucesso!');
+            window.location.href = 'catalogo.html';
+        }
+    }
+
+    // Lógica ao clicar em Registar
