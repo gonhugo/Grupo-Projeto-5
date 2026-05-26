@@ -3,182 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Inicial - Grupo 5</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f4f6f9; /* Mudado para um cinza leve para a box branca sobressair */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .box {
-            background: rgb(255, 255, 255);
-            padding: 30px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Nova classe para formatar o Logótipo enviado */
-        .logo-container {
-            text-align: center;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .logo-container img {
-            width: 100%;       /* Ocupa a largura disponível da box */
-            max-width: 250px;  /* Ajusta o tamanho máximo para ficar estético e no meio */
-            height: auto;      /* Mantém a proporção correta */
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #000000;
-            font-size: 22px;
-        }
-
-        .campo {
-            margin-bottom: 15px;
-        }
-
-        .campo label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .campo input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #ff1e00;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #c00808;
-        }
-
-        .alternar {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #333; /* Mudado de branco para cinza escuro para se conseguir ler */
-        }
-
-        .alternar a {
-            color: #ff1e00; /* Ajustado para vermelho para contrastar bem com a box branca */
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        .alternar a:hover {
-            text-decoration: underline;
-        }
-
-        /* Esconde o campo nome no modo login */
-        .oculto {
-            display: none;
-        }
-    </style>
+    <title>Bem-vindo - HS Hotels</title>
+    <link rel="stylesheet" href="../styles/styles.css">
 </head>
 <body>
 
-<div class="box">
-    <div class="logo-container">
-        <img src="Untitled.jpg" alt="Logótipo HS Hotels">
+<div class="container-pagamento" style="margin-top: 50px; text-align: center;">
+    <div class="header-pagamento">
+        <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels" style="max-width: 200px; margin-bottom: 20px;">
+        <h2>Bem-vindo à HS Hotels</h2>
+        <p style="color: #666; margin-top: 10px;">A sua plataforma de gestão e reservas de hotéis de eleição.</p>
     </div>
 
-    <h2 id="titulo">Registar</h2>
-    
-    <form id="meuFormulario" onsubmit="submeter(event)">
-        <div class="campo" id="grupo-nome">
-            <label for="nome">Nome</label>
-            <input type="text" id="nome" placeholder="Insira o seu nome" required>
+    <div class="seccao-comentarios" style="background: #fff; border: 1px solid #eee; padding: 30px; border-radius: 8px;">
+        <h3 style="margin-bottom: 20px; color: #333;">Selecione o Painel de Acesso:</h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px; max-width: 300px; margin: 0 auto;">
+            <a href="catalogo.html" class="btn-ver" style="padding: 12px; text-decoration: none;">Ver Catálogo de Hotéis</a>
+            <a href="administrador.html" class="btn-ver" style="background-color: #333; padding: 12px; text-decoration: none;">Painel do Administrador</a>
+            <a href="agentemarketing.html" class="btn-ver" style="background-color: #555; padding: 12px; text-decoration: none;">Painel de Marketing</a>
         </div>
-
-        <div class="campo">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Insira o seu email" required>
-        </div>
-
-        <div class="campo">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Insira a sua password" required>
-        </div>
-
-        <button type="submit" id="botao-enviar">Registar</button>
-    </form>
-
-    <div class="alternar">
-        <span id="texto-ajuda">Já tem uma conta?</span>
-        <a href="#" id="link-alternar" onclick="alternarModo(event)">Faça Login</a>
     </div>
+
+    <p style="font-size: 12px; color: #999; margin-top: 30px;">&copy; 2026 HS Hotels. Todos os direitos reservados.</p>
 </div>
-
-<script>
-    let modoRegisto = true;
-
-    const titulo = document.getElementById('titulo');
-    const grupoNome = document.getElementById('grupo-nome');
-    const inputNome = document.getElementById('nome');
-    const botaoEnviar = document.getElementById('botao-enviar');
-    const textoAjuda = document.getElementById('texto-ajuda');
-    const linkAlternar = document.getElementById('link-alternar');
-
-    function alternarModo(event) {
-        event.preventDefault();
-        modoRegisto = !modoRegisto;
-
-        if (modoRegisto) {
-            titulo.textContent = "Registar Conta";
-            botaoEnviar.textContent = "Registar";
-            textoAjuda.textContent = "Já tem uma conta?";
-            linkAlternar.textContent = "Faça Login";
-            grupoNome.classList.remove('oculto');
-            inputNome.setAttribute('required', 'required');
-        } else {
-            titulo.textContent = "Iniciar Sessão";
-            botaoEnviar.textContent = "Entrar";
-            textoAjuda.textContent = "Não tem uma conta?";
-            linkAlternar.textContent = "Registe-se";
-            grupoNome.classList.add('oculto');
-            inputNome.removeAttribute('required');
-        }
-    }
-
-    function submeter(event) {
-        event.preventDefault();
-        alert("Formulário enviado com sucesso!");
-    }
-</script>
 
 </body>
 </html>
