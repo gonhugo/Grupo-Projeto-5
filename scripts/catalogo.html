@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Ofertas - HS Hotels</title>
-    <!-- Leitura da pasta styles/styles.css -->
     <link rel="stylesheet" href="../styles/styles.css">
 </head>
 <body>
@@ -23,7 +22,35 @@
 <div class="grid-catalogo" id="espaco-cards"></div>
 
 <script>
+    function verificarBancoDeDados() {
+        var ofertasAtuais = localStorage.getItem('ofertas');
+        // Se não houver ofertas ou estiver vazio, cria as ofertas iniciais já com o caminho das imagens
+        if (!ofertasAtuais || ofertasAtuais === "[]") {
+            var ofertasIniciais = [
+                { 
+                    id: 1, 
+                    nome: "Hotel Praia Azul", 
+                    descricao: "Localização fantástica em frente ao mar, inclui pequeno-almoço.", 
+                    precoAntigo: 120, 
+                    precoNovo: 85,
+                    imagem: "../images/praia.jpg" // Caminho para a imagem na pasta images
+                },
+                { 
+                    id: 2, 
+                    nome: "Resort Serra Verde", 
+                    descricao: "Desconexão total no meio da natureza com trilhos e bungalows.", 
+                    precoAntigo: 180, 
+                    precoNovo: 130,
+                    imagem: "../images/serra.jpg" // Caminho para a imagem na pasta images
+                }
+            ];
+            localStorage.setItem('ofertas', JSON.stringify(ofertasIniciais));
+        }
+    }
+
     function renderizarCatalogo() {
+        verificarBancoDeDados(); // Garante que a base de dados local tem as imagens configuradas
+        
         var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
         var htmlEspaco = document.getElementById('espaco-cards');
         if (!htmlEspaco) return;
@@ -41,11 +68,15 @@
             }
             htmlPrecos += '<span class="preco-agora">' + o.precoNovo + '€</span>';
 
+            // Se a oferta não tiver imagem definida (por ter sido criada no admin), pomos uma por defeito
+            var urlImagem = o.imagem || "../images/logotipo.jpg";
+
             htmlEspaco.innerHTML += `
                 <div class="card-hotel">
+                    <img src="${urlImagem}" alt="${o.nome}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 4px; margin-bottom: 15px;">
                     <div>
                         <h3>${o.nome}</h3>
-                        <p>${o.descricao || 'Sem descrição disponível.'}</p>
+                        <p style="margin-bottom: 15px; color: #555;">${o.descricao || 'Sem descrição disponível.'}</p>
                     </div>
                     <div>
                         <div class="box-precos">${htmlPrecos}</div>
@@ -54,6 +85,7 @@
                 </div>`;
         });
     }
+    
     window.onload = function() { renderizarCatalogo(); };
 </script>
 </body>
