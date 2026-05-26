@@ -4,40 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Administrador - HS Hotels</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background-color: #f4f6f9; padding: 20px; color: #333; }
-        header {
-            background: white; padding: 15px 30px; border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; 
-            justify-content: space-between; align-items: center; margin-bottom: 25px;
-        }
-        .logo-container img { max-width: 150px; height: auto; }
-        .nav-links a { color: #ff1e00; text-decoration: none; font-weight: bold; }
-        .admin-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } }
-        .painel-box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        h2 { margin-bottom: 20px; font-size: 20px; color: #000; border-bottom: 2px solid #f4f6f9; padding-bottom: 10px;}
-        .btn-add { background-color: #ff1e00; color: white; border: none; padding: 10px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
-        .btn-add:hover { background-color: #c00808; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
-        th { background-color: #f8f9fa; font-weight: bold; }
-        
-        .btn-remover { background: none; border: none; color: #ff1e00; cursor: pointer; font-weight: bold; margin-right: 10px; }
-        .btn-remover:hover { text-decoration: underline; }
-        
-        .btn-editar { background: none; border: none; color: #333; cursor: pointer; font-weight: bold; }
-        .btn-editar:hover { text-decoration: underline; color: #000; }
-        
-        .desc-preview { display: block; font-size: 11px; color: #777; margin-top: 4px; max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    </style>
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
 
 <header>
     <div class="logo-container">
-        <div style="font-weight: bold; color: #ff1e00; font-size: 24px;">HS Hotels</div>
+        <img src="logotipo.jpg" alt="Logótipo HS Hotels">
     </div>
     <h2>Olá Administrador</h2>
     <div class="nav-links"><a href="catalogo.html">Voltar ao Catálogo</a></div>
@@ -64,47 +37,36 @@
 </div>
 
 <script>
-    // Função para forçar a criação de dados caso não existam
-    function inicializarBancoDados() {
-        var ofertas = localStorage.getItem('ofertas');
-        if (!ofertas || ofertas === "[]") {
+    function verificarBancoDeDados() {
+        var ofertasAtuais = localStorage.getItem('ofertas');
+        if (!ofertasAtuais || ofertasAtuais === "[]") {
             var ofertasIniciais = [
                 { id: 1, nome: "Hotel Praia Azul", descricao: "Localização fantástica em frente ao mar, inclui pequeno-almoço.", precoAntigo: 120, precoNovo: 85 },
                 { id: 2, nome: "Resort Serra Verde", descricao: "Desconexão total no meio da natureza com trilhos e bungalows.", precoAntigo: 180, precoNovo: 130 }
             ];
             localStorage.setItem('ofertas', JSON.stringify(ofertasIniciais));
         }
-
-        var utilizadores = localStorage.getItem('utilizadores');
-        if (!utilizadores || utilizadores === "[]") {
-            var usersIniciais = [
+        if (!localStorage.getItem('utilizadores')) {
+            var users = [
                 { id: 1, nome: "João Silva", email: "joao@email.com" },
                 { id: 2, nome: "Maria Santos", email: "maria@email.com" }
             ];
-            localStorage.setItem('utilizadores', JSON.stringify(usersIniciais));
+            localStorage.setItem('utilizadores', JSON.stringify(users));
         }
     }
 
     function carregarDados() {
-        inicializarBancoDados();
-
-        // Tabelas do HTML
+        verificarBancoDeDados();
         var tUser = document.getElementById('tabela-utilizadores');
         var tOfertas = document.getElementById('tabela-ofertas');
+        if (!tUser || !tOfertas) return;
 
-        if (!tUser || !tOfertas) {
-            console.error("Erro: Tabelas não encontradas no HTML.");
-            return;
-        }
-
-        // Renderizar Utilizadores
         var users = JSON.parse(localStorage.getItem('utilizadores')) || [];
         tUser.innerHTML = '';
         users.forEach(function(u) {
             tUser.innerHTML += '<tr><td>' + u.nome + '</td><td>' + u.email + '</td><td><button class="btn-remover" onclick="removerUtilizador(' + u.id + ')">Remover</button></td></tr>';
         });
 
-        // Renderizar Ofertas
         var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
         tOfertas.innerHTML = '';
         ofertas.forEach(function(o) {
@@ -163,26 +125,19 @@
     function editarOferta(id) {
         var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
         var oferta = ofertas.find(function(o) { return o.id === id; });
-        
         if (oferta) {
             var novoNome = prompt("Editar Nome do Hotel:", oferta.nome);
             if (novoNome === null) return; 
-            
             var novaDescricao = prompt("Editar Descrição do Hotel:", oferta.descricao);
             if (novaDescricao === null) return; 
-            
             oferta.nome = novoNome || oferta.nome;
             oferta.descricao = novaDescricao || oferta.descricao;
-            
             localStorage.setItem('ofertas', JSON.stringify(ofertas));
             carregarDados();
         }
     }
 
-    // Executa a função garantindo que o HTML já existe na árvore DOM
-    window.onload = function() {
-        carregarDados();
-    };
+    window.onload = function() { carregarDados(); };
 </script>
 </body>
 </html>
