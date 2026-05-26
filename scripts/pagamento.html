@@ -4,37 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento e Detalhes - HS Hotels</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background-color: #f4f6f9; padding: 20px; color: #333; }
-        .container-pagamento { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .header-pagamento { text-align: center; margin-bottom: 25px; }
-        .header-pagamento img { max-width: 180px; margin-bottom: 15px;}
-        h2, h3 { color: #000; margin-bottom: 15px; }
-        .detalhes-produto { border-bottom: 2px solid #f4f6f9; padding-bottom: 20px; margin-bottom: 20px; }
-        .preco-final { color: #ff1e00; font-size: 24px; font-weight: bold; margin-top: 10px; }
-        .metodos-pagamento { margin-bottom: 25px; }
-        .opcao-pagamento { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding: 12px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; }
-        .seccao-comentarios { background: #f9f9f9; padding: 20px; border-radius: 6px; margin-bottom: 25px; }
-        .comentario-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
-        .estrelas { color: #ffcc00; font-size: 16px; margin-bottom: 5px; }
-        .novo-comentario textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; height: 80px; resize: none; margin-top: 10px; margin-bottom: 10px; }
-        .btn-comentar { background-color: #333; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .botoes-container { display: flex; gap: 15px; margin-top: 20px; }
-        .btn-pagar { flex: 2; background-color: #ff1e00; color: white; border: none; padding: 14px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .btn-cancelar { flex: 1; background-color: #ccc; color: #333; border: none; padding: 14px; border-radius: 4px; font-size: 16px; font-weight: bold; text-align: center; text-decoration: none; }
-    </style>
+    <!-- Leitura da pasta styles/styles.css -->
+    <link rel="stylesheet" href="../styles/styles.css">
 </head>
 <body>
 
 <div class="container-pagamento">
     <div class="header-pagamento">
-        <img src="Untitled.jpg" alt="Logótipo HS Hotels">
+        <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels">
         <h2>Resumo da Reserva / Pagamento</h2>
     </div>
 
-    <div class="detalhes-produto" id="detalhes-oferta">
-        </div>
+    <div class="detalhes-produto" id="detalhes-oferta"></div>
 
     <div class="seccao-comentarios">
         <h3>Avaliações de Clientes</h3>
@@ -68,7 +49,6 @@
 </div>
 
 <script>
-    // Carregar dados dinâmicos do produto clicado
     const params = new URLSearchParams(window.location.search);
     const idOferta = parseInt(params.get('id')) || 1;
     const ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
@@ -82,7 +62,6 @@
         `;
     }
 
-    // Comentários em tempo real salvos por ID de Produto
     const chaveComentários = `comentarios_${idOferta}`;
     if (!localStorage.getItem(chaveComentários)) {
         localStorage.setItem(chaveComentários, JSON.stringify([
@@ -93,6 +72,7 @@
     function carregarComentarios() {
         const coms = JSON.parse(localStorage.getItem(chaveComentários)) || [];
         const box = document.getElementById('lista-comentarios');
+        if(!box) return;
         box.innerHTML = '';
         coms.forEach(c => {
             box.innerHTML += `<div class="comentario-item"><div class="estrelas">${c.estrelas}</div><p>${c.texto}</p></div>`;
@@ -106,15 +86,11 @@
             const coms = JSON.parse(localStorage.getItem(chaveComentários)) || [];
             coms.push({ estrelas, texto });
             localStorage.setItem(chaveComentários, JSON.stringify(coms));
-            document.getElementById('texto-comentario').value = ''; // Limpa a caixa
-            carregarComentarios(); // Atualiza em tempo real
+            document.getElementById('texto-comentario').value = '';
+            carregarComentarios();
         }
     }
-
-    // Executa ao carregar a página
-    window.onload = function() {
-        carregarComentarios();
-    };
+    window.onload = function() { carregarComentarios(); };
 </script>
 </body>
 </html>
