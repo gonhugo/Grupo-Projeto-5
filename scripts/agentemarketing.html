@@ -4,30 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Agente de Marketing - HS Hotels</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background-color: #f4f6f9; padding: 20px; color: #333; }
-        header {
-            background: white; padding: 15px 30px; border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; 
-            justify-content: space-between; align-items: center; margin-bottom: 25px;
-        }
-        .nav-links a { color: #ff1e00; text-decoration: none; font-weight: bold; }
-        .painel-box { max-width: 900px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        h2 { margin-bottom: 20px; font-size: 20px; color: #000; border-bottom: 2px solid #f4f6f9; padding-bottom: 10px;}
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
-        th { background-color: #f8f9fa; font-weight: bold; }
-        .preco-antigo { color: #777; text-decoration: line-through; margin-right: 8px; font-size: 12px; }
-        .preco-novo { color: #ff1e00; font-weight: bold; }
-        .btn-modificar { background-color: #333; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn-modificar:hover { background-color: #555; }
-    </style>
+    <!-- Leitura da pasta styles/styles.css -->
+    <link rel="stylesheet" href="../styles/styles.css">
 </head>
 <body>
 
 <header>
-    <div style="font-weight: bold; color: #ff1e00; font-size: 24px;">HS Hotels</div>
+    <div class="logo-container">
+        <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels">
+    </div>
     <h2>Olá Agente de Marketing</h2>
     <div class="nav-links"><a href="catalogo.html">Voltar ao Catálogo</a></div>
 </header>
@@ -50,12 +35,10 @@
     function carregarDadosMarketing() {
         var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
         var tabela = document.getElementById('tabela-marketing');
-        
         if (!tabela) return;
         tabela.innerHTML = '';
 
         ofertas.forEach(function(o) {
-            // Se o preço antigo for igual ao novo, não vale a pena mostrar o rasurado
             var textoPreco = '';
             if (o.precoAntigo && o.precoAntigo !== o.precoNovo) {
                 textoPreco += '<span class="preco-antigo">' + o.precoAntigo + '€</span>';
@@ -74,20 +57,13 @@
     function alterarPreco(id) {
         var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
         var oferta = ofertas.find(function(o) { return o.id === id; });
-
         if (oferta) {
             var precoDigitado = prompt("Insira o NOVO preço para " + oferta.nome + " (€):", oferta.precoNovo);
-            
             if (precoDigitado !== null && precoDigitado.trim() !== "") {
                 var novoPrecoNum = Number(precoDigitado);
-
                 if (!isNaN(novoPrecoNum)) {
-                    // LÓGICA DINÂMICA: O preço que era o "novo" passa a ser o "antigo"
                     oferta.precoAntigo = oferta.precoNovo; 
-                    
-                    // O novo preço passa a ser o valor que o agente acabou de digitar
                     oferta.precoNovo = novoPrecoNum;
-
                     localStorage.setItem('ofertas', JSON.stringify(ofertas));
                     carregarDadosMarketing();
                 } else {
@@ -96,10 +72,7 @@
             }
         }
     }
-
-    window.onload = function() {
-        carregarDadosMarketing();
-    };
+    window.onload = function() { carregarDadosMarketing(); };
 </script>
 </body>
 </html>
