@@ -4,30 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Ofertas - HS Hotels</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background-color: #f4f6f9; padding: 20px; color: #333; }
-        header {
-            background: white; padding: 15px 30px; border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; 
-            justify-content: space-between; align-items: center; margin-bottom: 25px;
-        }
-        .nav-links a { color: #ff1e00; text-decoration: none; font-weight: bold; margin-left: 15px; }
-        .grid-catalogo { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .card-hotel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
-        .card-hotel h3 { margin-bottom: 10px; color: #000; }
-        .card-hotel p { font-size: 14px; color: #666; margin-bottom: 15px; line-height: 1.4; }
-        .box-precos { margin-bottom: 15px; }
-        .preco-antes { color: #999; text-decoration: line-through; font-size: 14px; margin-right: 10px; }
-        .preco-agora { color: #ff1e00; font-size: 22px; font-weight: bold; }
-        .btn-ver { background-color: #ff1e00; color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; display: block; }
-        .btn-ver:hover { background-color: #c00808; }
-    </style>
+    <!-- Leitura da pasta styles/styles.css -->
+    <link rel="stylesheet" href="../styles/styles.css">
 </head>
 <body>
 
 <header>
-    <div style="font-weight: bold; color: #ff1e00; font-size: 24px;">HS Hotels</div>
+    <div class="logo-container">
+        <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels">
+    </div>
     <h2>Catálogo de Hotéis</h2>
     <div class="nav-links">
         <a href="administrador.html">Painel Admin</a>
@@ -35,49 +20,41 @@
     </div>
 </header>
 
-<div class="grid-catalogo" id="espaco-cards">
-    </div>
+<div class="grid-catalogo" id="espaco-cards"></div>
 
 <script>
     function renderizarCatalogo() {
         var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
-        var espaco = document.getElementById('espaco-cards');
-        
-        if (!espaco) return;
-        espaco.innerHTML = '';
+        var htmlEspaco = document.getElementById('espaco-cards');
+        if (!htmlEspaco) return;
+        htmlEspaco.innerHTML = '';
 
         if (ofertas.length === 0) {
-            espaco.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #777;">Nenhuma oferta disponível de momento.</p>';
+            htmlEspaco.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #777;">Nenhuma oferta disponível de momento.</p>';
             return;
         }
 
         ofertas.forEach(function(o) {
-            // Validar se exibe preço antigo rasurado
             var htmlPrecos = '';
             if (o.precoAntigo && o.precoAntigo !== o.precoNovo) {
                 htmlPrecos += '<span class="preco-antes">Antes: ' + o.precoAntigo + '€</span>';
             }
             htmlPrecos += '<span class="preco-agora">' + o.precoNovo + '€</span>';
 
-            espaco.innerHTML += `
+            htmlEspaco.innerHTML += `
                 <div class="card-hotel">
                     <div>
                         <h3>${o.nome}</h3>
                         <p>${o.descricao || 'Sem descrição disponível.'}</p>
                     </div>
                     <div>
-                        <div class="box-precos">
-                            ${htmlPrecos}
-                        </div>
+                        <div class="box-precos">${htmlPrecos}</div>
                         <a href="pagamento.html?id=${o.id}" class="btn-ver">Ver Oferta</a>
                     </div>
                 </div>`;
         });
     }
-
-    window.onload = function() {
-        renderizarCatalogo();
-    };
+    window.onload = function() { renderizarCatalogo(); };
 </script>
 </body>
 </html>
