@@ -6,7 +6,7 @@
     <title>Login & Registo - HS Hotels</title>
     <link rel="stylesheet" href="../styles/styles.css">
     <style>
-        
+        /* Estilos específicos para alinhar os campos do formulário na perfeição */
         .campo-grupo {
             margin-bottom: 15px;
             text-align: left;
@@ -24,16 +24,18 @@
             border-radius: 4px;
             font-size: 14px;
         }
-        .alternar-link {
+        .btn-alternar {
+            background: none;
+            border: none;
             display: block;
-            margin-top: 15px;
+            margin: 15px auto 0 auto;
             color: #ff1e00;
             text-decoration: none;
             font-size: 13px;
             font-weight: bold;
             cursor: pointer;
         }
-        .alternar-link:hover {
+        .btn-alternar:hover {
             text-decoration: underline;
         }
     </style>
@@ -45,7 +47,7 @@
         <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels" style="max-width: 180px; margin-bottom: 15px;">
     </div>
 
-    <div id="seccao-login" class="seccao-comentarios" style="background: #fff; border: none; padding: 10px 0; margin-bottom: 0;">
+    <div id="seccao-login" style="display: block;">
         <h2 style="margin-bottom: 20px;">Iniciar Sessão</h2>
         <form onsubmit="efetuarLogin(event)">
             <div class="campo-grupo">
@@ -58,10 +60,10 @@
             </div>
             <button type="submit" class="btn-ver" style="border: none; cursor: pointer; padding: 12px;">Entrar</button>
         </form>
-        <span class="alternar-link" onclick="mostrarRegisto()">Não tem conta? Registe-se aqui</span>
+        <button type="button" class="btn-alternar" onclick="mostrarRegisto()">Não tem conta? Registe-se aqui</button>
     </div>
 
-    <div id="seccao-registo" class="seccao-comentarios" style="background: #fff; border: none; padding: 10px 0; margin-bottom: 0; display: none;">
+    <div id="seccao-registo" style="display: none;">
         <h2 style="margin-bottom: 20px;">Criar Nova Conta</h2>
         <form onsubmit="efetuarRegisto(event)">
             <div class="campo-grupo">
@@ -78,7 +80,7 @@
             </div>
             <button type="submit" class="btn-ver" style="border: none; cursor: pointer; padding: 12px;">Registar e Entrar</button>
         </form>
-        <span class="alternar-link" onclick="mostrarLogin()">Já tem conta? Faça Login</span>
+        <button type="button" class="btn-alternar" onclick="mostrarLogin()">Já tem conta? Faça Login</button>
     </div>
 </div>
 
@@ -112,4 +114,22 @@
         }
     }
 
-    
+    // Lógica ao clicar em Registar
+    function efetuarRegisto(event) {
+        event.preventDefault();
+        
+        var nome = document.getElementById('registo-nome').value;
+        var email = document.getElementById('registo-email').value;
+
+        // Guarda o utilizador registado no localStorage para aparecer na lista do Admin
+        var utilizadores = JSON.parse(localStorage.getItem('utilizadores')) || [];
+        utilizadores.push({ id: Date.now(), nome: nome, email: email });
+        localStorage.setItem('utilizadores', JSON.stringify(utilizadores));
+
+        alert('Conta criada com sucesso! Bem-vindo ' + nome);
+        window.location.href = 'catalogo.html';
+    }
+</script>
+
+</body>
+</html>
