@@ -66,7 +66,7 @@
     <div id="seccao-registo" style="display: none;">
         <h2 style="margin-bottom: 20px;">Criar Nova Conta</h2>
         
-        <form action="novoregisto.php" method="POST">
+        <form action="./novoregisto.php" method="POST">
             <div class="campo-grupo">
                 <label>Nome Completo:</label>
                 <input type="text" name="nome_completo" required placeholder="Insira o seu nome">
@@ -86,7 +86,6 @@
 </div>
 
 <script>
-    // Funções para alternar visualmente entre o formulário de Login e o de Registo
     function mostrarRegisto() {
         document.getElementById('seccao-login').style.display = 'none';
         document.getElementById('seccao-registo').style.display = 'block';
@@ -97,10 +96,8 @@
         document.getElementById('seccao-login').style.display = 'block';
     }
 
-    // Lógica local para o Login (ex: simulação do painel Admin ou catálogo estático)
     function efetuarLogin(event) {
         event.preventDefault();
-        
         var email = document.getElementById('login-email').value;
 
         if (email.toLowerCase() === 'admin' || email.toLowerCase() === 'admin@email.com') {
