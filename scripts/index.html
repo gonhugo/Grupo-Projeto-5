@@ -65,18 +65,19 @@
 
     <div id="seccao-registo" style="display: none;">
         <h2 style="margin-bottom: 20px;">Criar Nova Conta</h2>
-        <form onsubmit="efetuarRegisto(event)">
+        
+        <form action="novoregisto.php" method="POST">
             <div class="campo-grupo">
                 <label>Nome Completo:</label>
-                <input type="text" id="registo-nome" required placeholder="Insira o seu nome">
+                <input type="text" name="nome_completo" required placeholder="Insira o seu nome">
             </div>
             <div class="campo-grupo">
                 <label>Email:</label>
-                <input type="email" id="registo-email" required placeholder="Insira o seu email">
+                <input type="email" name="email_utilizador" required placeholder="Insira o seu email">
             </div>
             <div class="campo-grupo">
                 <label>Palavra-passe (Password):</label>
-                <input type="password" id="registo-pass" required placeholder="Crie uma password">
+                <input type="password" name="password_utilizador" required placeholder="Crie uma password">
             </div>
             <button type="submit" class="btn-ver" style="border: none; cursor: pointer; padding: 12px;">Registar e Entrar</button>
         </form>
@@ -96,38 +97,19 @@
         document.getElementById('seccao-login').style.display = 'block';
     }
 
-    // Lógica ao clicar em Entrar
+    // Lógica local para o Login (ex: simulação do painel Admin ou catálogo estático)
     function efetuarLogin(event) {
         event.preventDefault();
         
         var email = document.getElementById('login-email').value;
-        var pass = document.getElementById('login-pass').value;
 
-        // Se for o administrador do sistema
         if (email.toLowerCase() === 'admin' || email.toLowerCase() === 'admin@email.com') {
             alert('Bem-vindo, Administrador!');
             window.location.href = 'administrador.html';
         } else {
-            // Utilizador comum vai para o catálogo
             alert('Login efetuado com sucesso!');
             window.location.href = 'catalogo.html';
         }
-    }
-
-    // Lógica ao clicar em Registar
-    function efetuarRegisto(event) {
-        event.preventDefault();
-        
-        var nome = document.getElementById('registo-nome').value;
-        var email = document.getElementById('registo-email').value;
-
-        // Guarda o utilizador registado no localStorage para aparecer na lista do Admin
-        var utilizadores = JSON.parse(localStorage.getItem('utilizadores')) || [];
-        utilizadores.push({ id: Date.now(), nome: nome, email: email });
-        localStorage.setItem('utilizadores', JSON.stringify(utilizadores));
-
-        alert('Conta criada com sucesso! Bem-vindo ' + nome);
-        window.location.href = 'catalogo.html';
     }
 </script>
 
