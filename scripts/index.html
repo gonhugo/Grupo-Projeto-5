@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login & Registo - HS Hotels</title>
+    <!-- Leitura correta do CSS na pasta de estilos separada -->
     <link rel="stylesheet" href="../styles/styles.css">
     <style>
-        /* Estilos específicos para alinhar os campos do formulário na perfeição */
+        /* Estilos estruturais para o alinhamento dos campos */
         .campo-grupo {
             margin-bottom: 15px;
             text-align: left;
@@ -23,6 +24,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 14px;
+            box-sizing: border-box;
         }
         .btn-alternar {
             background: none;
@@ -42,11 +44,13 @@
 </head>
 <body>
 
-<div class="container-pagamento" style="max-width: 450px; margin-top: 60px; text-align: center;">
+<div class="container-pagamento" style="max-width: 450px; margin-top: 60px; text-align: center; margin-left: auto; margin-right: auto; padding: 20px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
     <div class="header-pagamento">
+        <!-- Logótipo na pasta de imagens separada -->
         <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels" style="max-width: 180px; margin-bottom: 15px;">
     </div>
 
+    <!-- SECÇÃO DE LOGIN -->
     <div id="seccao-login" style="display: block;">
         <h2 style="margin-bottom: 20px;">Iniciar Sessão</h2>
         <form onsubmit="efetuarLogin(event)">
@@ -58,15 +62,17 @@
                 <label>Palavra-passe (Password):</label>
                 <input type="password" id="login-pass" required placeholder="Insira a sua password">
             </div>
-            <button type="submit" class="btn-ver" style="border: none; cursor: pointer; padding: 12px;">Entrar</button>
+            <button type="submit" class="btn-ver" style="border: none; cursor: pointer; padding: 12px; width: 100%; background-color: #333; color: white; border-radius: 4px; font-weight: bold;">Entrar</button>
         </form>
         <button type="button" class="btn-alternar" onclick="mostrarRegisto()">Não tem conta? Registe-se aqui</button>
     </div>
 
+    <!-- SECÇÃO DE REGISTO -->
     <div id="seccao-registo" style="display: none;">
         <h2 style="margin-bottom: 20px;">Criar Nova Conta</h2>
         
-        <form action="novoregisto.php" method="POST"></form>
+        <!-- Rota direta para o ficheiro novoregisto.php na mesma pasta 'scripts' -->
+        <form action="novoregisto.php" method="POST">
             <div class="campo-grupo">
                 <label>Nome Completo:</label>
                 <input type="text" name="nome_completo" required placeholder="Insira o seu nome">
@@ -79,13 +85,14 @@
                 <label>Palavra-passe (Password):</label>
                 <input type="password" name="password_utilizador" required placeholder="Crie uma password">
             </div>
-            <button type="submit" class="btn-ver" style="border: none; cursor: pointer; padding: 12px;">Registar e Entrar</button>
+            <button type="submit" class="btn-ver" style="border: none; cursor: pointer; padding: 12px; width: 100%; background-color: #333; color: white; border-radius: 4px; font-weight: bold;">Registar e Entrar</button>
         </form>
         <button type="button" class="btn-alternar" onclick="mostrarLogin()">Já tem conta? Faça Login</button>
     </div>
 </div>
 
 <script>
+    // Funções para alternar visualmente entre os dois formulários
     function mostrarRegisto() {
         document.getElementById('seccao-login').style.display = 'none';
         document.getElementById('seccao-registo').style.display = 'block';
@@ -96,6 +103,7 @@
         document.getElementById('seccao-login').style.display = 'block';
     }
 
+    // Função de simulação para o login administrativo/cliente
     function efetuarLogin(event) {
         event.preventDefault();
         var email = document.getElementById('login-email').value;
