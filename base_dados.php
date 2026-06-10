@@ -1,16 +1,12 @@
 <?php
-// Nome do ficheiro da base de dados SQLite3 que será criado na mesma pasta
 $databaseFile = 'hotel.db';
 
 try {
-    // 1. Cria ou abre a ligação à base de dados SQLite3 através de PDO
     $pdo = new PDO("sqlite:" . $databaseFile);
-    // Configura o PDO para lançar exceções em caso de erro
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     echo "<h2>A iniciar a criação da Base de Dados SQLite3...</h2>";
 
-    // 2. SQL para criar a tabela 'Utilizadores' (incluindo o requisito do ponto 8)
     $sqlUtilizadores = "
         CREATE TABLE IF NOT EXISTS Utilizadores (
             ID_Utilizador INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,7 +21,7 @@ try {
     $pdo->exec($sqlUtilizadores);
     echo "<p style='color: green;'>✅ Tabela 'Utilizadores' criada ou já existente.</p>";
 
-    // 3. SQL para criar a tabela 'Reviews'
+    
     $sqlReviews = "
         CREATE TABLE IF NOT EXISTS Reviews (
             ID_Review INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,7 +36,7 @@ try {
     $pdo->exec($sqlReviews);
     echo "<p style='color: green;'>✅ Tabela 'Reviews' criada ou já existente.</p>";
 
-    // 4. SQL para criar a tabela 'Ofertas'
+    
     $sqlOfertas = "
         CREATE TABLE IF NOT EXISTS Ofertas (
             ID_Oferta INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,7 +49,6 @@ try {
     $pdo->exec($sqlOfertas);
     echo "<p style='color: green;'>✅ Tabela 'Ofertas' criada ou já existente.</p>";
 
-    // 5. SQL para criar a tabela 'Promocoes'
     $sqlPromocoes = "
         CREATE TABLE IF NOT EXISTS Promocoes (
             ID_Promocao INTEGER PRIMARY KEY AUTOINCREMENT,

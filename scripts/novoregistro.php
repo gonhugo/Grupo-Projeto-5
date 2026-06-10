@@ -15,8 +15,7 @@
 
 <div class="mensagem-box">
 <?php
-// 1. Definição e Utilização da Base de Dados SQLite3 (Ponto 6)
-// O ficheiro "hshotels.db" será criado automaticamente dentro da pasta "scripts"
+
 try {
     $db = new PDO("sqlite:hshotels.db");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -37,7 +36,6 @@ try {
     exit();
 }
 
-// 2. Desenvolver a funcionalidade de Escrita (Ponto 7 / 7.a)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recolha e higienização dos dados do formulário index.html
     $username = isset($_POST['nome_completo']) ? trim($_POST['nome_completo']) : '';

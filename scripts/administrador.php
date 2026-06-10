@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Administrador - HS Hotels</title>
     <style>
-        /* Estilos para recriar fielmente o teu design profissional */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
@@ -32,7 +31,6 @@
             margin: 0 auto;
         }
 
-        /* Cartões brancos laterais */
         .cartao-admin {
             background-color: #ffffff;
             border-radius: 12px;
@@ -51,7 +49,7 @@
             font-weight: bold;
         }
 
-        /* Botões Vermelhos */
+        
         .btn-adicionar {
             display: inline-block;
             background-color: #ff1e00;
@@ -101,7 +99,7 @@
             color: #777;
         }
 
-        /* Links de Ações */
+        
         .link-remover {
             color: #ff1e00;
             text-decoration: none;
@@ -123,7 +121,7 @@
             text-decoration: underline;
         }
 
-        /* Responsividade básica */
+        
         @media (max-width: 900px) {
             .painel-container {
                 flex-direction: column;
@@ -157,27 +155,26 @@
                 <tbody>
                     <?php
                     try {
-                        // 1. Liga à base de dados SQLite3 (Ponto 6)
+                        
                         $db = new PDO("sqlite:hshotels.db");
                         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                        // 2. Consulta os utilizadores registados de forma real (Ponto 7.a / 8.c)
+                        
                         $query = "SELECT username, email, ultimo_acesso FROM utilizadores ORDER BY id DESC";
                         $resultado = $db->query($query);
                         $linhas = $resultado->fetchAll(PDO::FETCH_ASSOC);
 
-                        // 3. Se existirem dados na BD, gera as linhas HTML
+                        
                         if (count($linhas) > 0) {
                             foreach ($linhas as $linha) {
                                 echo "<tr>";
-                                // Mostra o username e adiciona a data de acesso por baixo do nome como extra de debug
                                 echo "<td>" . htmlspecialchars($linha['username']) . "<p><small>Acesso: " . htmlspecialchars($linha['ultimo_acesso'] ?? 'N/A') . "</small></p></td>";
                                 echo "<td>" . htmlspecialchars($linha['email']) . "</td>";
                                 echo "<td><a href='#' class='link-remover'>Remover</a></td>";
                                 echo "</tr>";
                             }
                         } else {
-                            // Se a base de dados estiver limpa
+                            
                             echo "<tr><td colspan='3' style='text-align: center; color: #999; padding: 20px;'>Nenhum utilizador registado na Base de Dados.</td></tr>";
                         }
 
