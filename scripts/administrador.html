@@ -5,139 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Administrador - HS Hotels</title>
     <link rel="stylesheet" href="../styles/styles.css">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px; color: #333; }
+        .admin-container { max-width: 900px; margin: 0 auto; }
+        .seccao-admin { background: white; padding: 25px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h2 { border-bottom: 2px solid #ff1e00; padding-bottom: 10px; color: #222; margin-top: 0; }
+        
+        /* Estilos do Formulário (ADM1) */
+        .campo-grupo { margin-bottom: 15px; }
+        .campo-grupo label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+        .campo-grupo input, .campo-grupo textarea, .campo-grupo select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-submeter { border: none; cursor: pointer; padding: 12px 20px; background-color: #ff1e00; color: white; border-radius: 4px; font-weight: bold; font-size: 15px; }
+        
+        /* Estilos da Tabela de Registos (USR1 / Ponto 8.c) */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        th { background-color: #333; color: white; }
+        tr:hover { background-color: #f9f9f9; }
+        .sem-dados { text-align: center; color: #777; padding: 20px; }
+    </style>
 </head>
 <body>
 
-<header>
-    <div class="logo-container">
-        <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels">
-    </div>
-    <h2>Olá Administrador</h2>
-    <div class="nav-links"><a href="catalogo.html">Voltar ao Catálogo</a></div>
-</header>
+<div class="admin-container">
+    <h1 style="text-align: center; margin-bottom: 30px; color: #111;">Gestão Interna - HS Hotels</h1>
 
-<div class="admin-grid">
-    <div class="painel-box">
-        <h2>Lista de Utilizadores</h2>
-        <button class="btn-add" onclick="adicionarUtilizador()">+ Adicionar Utilizador</button>
-        <table>
-            <thead><tr><th>Nome</th><th>Email</th><th>Ações</th></tr></thead>
-            <tbody id="tabela-utilizadores"></tbody>
-        </table>
+    <div class="seccao-admin">
+        <h2>➕ Inserir Nova Oferta de Quarto</h2>
+        <form action="novaoferta.php" method="POST">
+            <div class="campo-grupo">
+                <label>Título da Oferta / Nome do Quarto:</label>
+                <input type="text" name="titulo_oferta" required placeholder="Ex: Suite Familiar Vista Mar">
+            </div>
+
+            <div class="campo-grupo">
+                <label>Tipo de Alojamento:</label>
+                <select name="tipo_quarto" required>
+                    <option value="Standard">Standard</option>
+                    <option value="Prestige">Prestige</option>
+                    <option value="Presidential">Presidential</option>
+                </select>
+            </div>
+
+            <div class="campo-grupo">
+                <label>Preço por Noite (€):</label>
+                <input type="number" name="preco_noite" step="0.01" required placeholder="Ex: 120.00">
+            </div>
+
+            <div class="campo-grupo">
+                <label>Descrição Detalhada:</label>
+                <textarea name="descricao_oferta" rows="4" required placeholder="Escreva aqui as regalias, tamanho do quarto, extras incluídos..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-submeter">Publicar Oferta no Catálogo</button>
+        </form>
     </div>
 
-    <div class="painel-box">
-        <h2>Lista de Ofertas (Catálogo)</h2>
-        <button class="btn-add" onclick="adicionarOferta()">+ Adicionar Nova Oferta</button>
+    <div class="seccao-admin">
+        <h2>📋 Monitorização de Utilizadores e Últimos Acessos</h2>
+        <p style="font-size: 13px; color: #666;">Dados carregados em tempo real a partir do servidor SQLite3 (<code>hshotels.db</code>).</p>
+        
         <table>
-            <thead><tr><th>Oferta / Descrição</th><th>Preço</th><th>Ações</th></tr></thead>
-            <tbody id="tabela-ofertas"></tbody>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username / Nome</th>
+                    <th>Email do Cliente</th>
+                    <th>Data do Último Acesso</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                try {
+                    // Ligar à mesma base de dados SQLite3 criada no novoregistro.php (Ponto 6)
+                    $db = new PDO("sqlite:hshotels.db");
+                    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                    // Executar a consulta para ler os dados guardados (Leitura - Ponto 7.a e 8.c)
+                    $query = "SELECT id, username, email, ultimo_acesso FROM utilizadores ORDER BY id DESC";
+                    $resultado = $db->query($query);
+
+                    // Verificar se existem utilizadores na tabela
+                    $linhas = $resultado->fetchAll(PDO::FETCH_ASSOC);
+
+                    if (count($linhas) > 0) {
+                        foreach ($linhas as $linha) {
+                            echo "<tr>";
+                            echo "<td><strong>#" . htmlspecialchars($linha['id']) . "</strong></td>";
+                            echo "<td>" . htmlspecialchars($linha['username']) . "</td>";
+                            echo "<td>" . htmlspecialchars($linha['email']) . "</td>";
+                            echo "<td>" . htmlspecialchars($linha['ultimo_acesso'] ?? 'Sem registo') . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='4' class='sem-dados'>Ainda não existem clientes registados na Base de Dados.</td></tr>";
+                    }
+
+                } catch (PDOException $e) {
+                    echo "<tr><td colspan='4' style='color: red; font-weight: bold;'>Erro ao aceder ao SQLite3: " . $e->getMessage() . "</td></tr>";
+                }
+                ?>
+            </tbody>
         </table>
     </div>
 </div>
 
-<script>
-    function verificarBancoDeDados() {
-        var ofertasAtuais = localStorage.getItem('ofertas');
-        if (!ofertasAtuais || ofertasAtuais === "[]") {
-            var ofertasIniciais = [
-                { id: 1, nome: "Hotel Praia Azul", descricao: "Localização fantástica em frente ao mar, inclui pequeno-almoço.", precoAntigo: 120, precoNovo: 85 },
-                { id: 2, nome: "Resort Serra Verde", descricao: "Desconexão total no meio da natureza com trilhos e bungalows.", precoAntigo: 180, precoNovo: 130 }
-            ];
-            localStorage.setItem('ofertas', JSON.stringify(ofertasIniciais));
-        }
-        if (!localStorage.getItem('utilizadores')) {
-            var users = [
-                { id: 1, nome: "João Silva", email: "joao@email.com" },
-                { id: 2, nome: "Maria Santos", email: "maria@email.com" }
-            ];
-            localStorage.setItem('utilizadores', JSON.stringify(users));
-        }
-    }
-
-    function carregarDados() {
-        verificarBancoDeDados();
-        var tUser = document.getElementById('tabela-utilizadores');
-        var tOfertas = document.getElementById('tabela-ofertas');
-        if (!tUser || !tOfertas) return;
-
-        var users = JSON.parse(localStorage.getItem('utilizadores')) || [];
-        tUser.innerHTML = '';
-        users.forEach(function(u) {
-            tUser.innerHTML += '<tr><td>' + u.nome + '</td><td>' + u.email + '</td><td><button class="btn-remover" onclick="removerUtilizador(' + u.id + ')">Remover</button></td></tr>';
-        });
-
-        var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
-        tOfertas.innerHTML = '';
-        ofertas.forEach(function(o) {
-            tOfertas.innerHTML += `
-                <tr>
-                    <td>
-                        <strong>${o.nome}</strong>
-                        <span class="desc-preview">${o.descricao || 'Sem descrição'}</span>
-                    </td>
-                    <td>${o.precoNovo}€</td>
-                    <td>
-                        <button class="btn-remover" onclick="removerOferta(${o.id})">Remover</button>
-                        <button class="btn-editar" onclick="editarOferta(${o.id})">Editar</button>
-                    </td>
-                </tr>`;
-        });
-    }
-
-    function adicionarUtilizador() {
-        var nome = prompt("Nome do utilizador:");
-        var email = prompt("Email do utilizador:");
-        if(nome && email) {
-            var users = JSON.parse(localStorage.getItem('utilizadores')) || [];
-            users.push({ id: Date.now(), nome: nome, email: email });
-            localStorage.setItem('utilizadores', JSON.stringify(users));
-            carregarDados();
-        }
-    }
-
-    function removerUtilizador(id) {
-        var users = JSON.parse(localStorage.getItem('utilizadores')) || [];
-        users = users.filter(function(u) { return u.id !== id; });
-        localStorage.setItem('utilizadores', JSON.stringify(users));
-        carregarDados();
-    }
-
-    function adicionarOferta() {
-        var nome = prompt("Nome da Oferta/Hotel:");
-        var desc = prompt("Descrição:");
-        var preco = prompt("Preço Atual (€):");
-        if(nome && desc && preco) {
-            var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
-            ofertas.push({ id: Date.now(), nome: nome, descricao: desc, precoAntigo: Number(preco), precoNovo: Number(preco) });
-            localStorage.setItem('ofertas', JSON.stringify(ofertas));
-            carregarDados();
-        }
-    }
-
-    function removerOferta(id) {
-        var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
-        ofertas = ofertas.filter(function(o) { return o.id !== id; });
-        localStorage.setItem('ofertas', JSON.stringify(ofertas));
-        carregarDados();
-    }
-
-    function editarOferta(id) {
-        var ofertas = JSON.parse(localStorage.getItem('ofertas')) || [];
-        var oferta = ofertas.find(function(o) { return o.id === id; });
-        if (oferta) {
-            var novoNome = prompt("Editar Nome do Hotel:", oferta.nome);
-            if (novoNome === null) return; 
-            var novaDescricao = prompt("Editar Descrição do Hotel:", oferta.descricao);
-            if (novaDescricao === null) return; 
-            oferta.nome = novoNome || oferta.nome;
-            oferta.descricao = novaDescricao || oferta.descricao;
-            localStorage.setItem('ofertas', JSON.stringify(ofertas));
-            carregarDados();
-        }
-    }
-
-    window.onload = function() { carregarDados(); };
-</script>
 </body>
 </html>
