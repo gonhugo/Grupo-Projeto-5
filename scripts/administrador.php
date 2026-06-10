@@ -4,111 +4,243 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Administrador - HS Hotels</title>
-    <link rel="stylesheet" href="../styles/styles.css">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px; color: #333; }
-        .admin-container { max-width: 900px; margin: 0 auto; }
-        .seccao-admin { background: white; padding: 25px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        h2 { border-bottom: 2px solid #ff1e00; padding-bottom: 10px; color: #222; margin-top: 0; }
-        
-        /* Estilos do Formulário (ADM1) */
-        .campo-grupo { margin-bottom: 15px; }
-        .campo-grupo label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-        .campo-grupo input, .campo-grupo textarea, .campo-grupo select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .btn-submeter { border: none; cursor: pointer; padding: 12px 20px; background-color: #ff1e00; color: white; border-radius: 4px; font-weight: bold; font-size: 15px; }
-        
-        /* Estilos da Tabela de Registos (USR1 / Ponto 8.c) */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
-        th { background-color: #333; color: white; }
-        tr:hover { background-color: #f9f9f9; }
-        .sem-dados { text-align: center; color: #777; padding: 20px; }
+        /* Estilos para recriar fielmente o teu design profissional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1.titulo-admin {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #000;
+        }
+
+        .painel-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 25px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Cartões brancos laterais */
+        .cartao-admin {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            width: 45%;
+            min-width: 450px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
+        }
+
+        .cartao-admin h2 {
+            font-size: 22px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* Botões Vermelhos */
+        .btn-adicionar {
+            display: inline-block;
+            background-color: #ff1e00;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-adicionar:hover {
+            background-color: #d61800;
+        }
+
+        /* Tabelas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #666;
+            font-size: 14px;
+            padding: 12px 10px;
+            font-weight: 600;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        td {
+            padding: 14px 10px;
+            font-size: 14px;
+            color: #333;
+            border-bottom: 1px solid #f6f6f6;
+            vertical-align: top;
+        }
+
+        td p {
+            margin: 4px 0 0 0;
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* Links de Ações */
+        .link-remover {
+            color: #ff1e00;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link-remover:hover {
+            text-decoration: underline;
+        }
+
+        .link-editar {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .link-editar:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsividade básica */
+        @media (max-width: 900px) {
+            .painel-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .cartao-admin {
+                width: 100%;
+                min-width: unset;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="admin-container">
-    <h1 style="text-align: center; margin-bottom: 30px; color: #111;">Gestão Interna - HS Hotels</h1>
+    <h1 class="titulo-admin">Olá Administrador</h1>
 
-    <div class="seccao-admin">
-        <h2>➕ Inserir Nova Oferta de Quarto</h2>
-        <form action="novaoferta.php" method="POST">
-            <div class="campo-grupo">
-                <label>Título da Oferta / Nome do Quarto:</label>
-                <input type="text" name="titulo_oferta" required placeholder="Ex: Suite Familiar Vista Mar">
-            </div>
+    <div class="painel-container">
 
-            <div class="campo-grupo">
-                <label>Tipo de Alojamento:</label>
-                <select name="tipo_quarto" required>
-                    <option value="Standard">Standard</option>
-                    <option value="Prestige">Prestige</option>
-                    <option value="Presidential">Presidential</option>
-                </select>
-            </div>
+        <div class="cartao-admin">
+            <h2>Lista de Utilizadores</h2>
+            <a href="#" class="btn-adicionar">+ Adicionar Utilizador</a>
 
-            <div class="campo-grupo">
-                <label>Preço por Noite (€):</label>
-                <input type="number" name="preco_noite" step="0.01" required placeholder="Ex: 120.00">
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    try {
+                        // 1. Liga à base de dados SQLite3 (Ponto 6)
+                        $db = new PDO("sqlite:hshotels.db");
+                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            <div class="campo-grupo">
-                <label>Descrição Detalhada:</label>
-                <textarea name="descricao_oferta" rows="4" required placeholder="Escreva aqui as regalias, tamanho do quarto, extras incluídos..."></textarea>
-            </div>
+                        // 2. Consulta os utilizadores registados de forma real (Ponto 7.a / 8.c)
+                        $query = "SELECT username, email, ultimo_acesso FROM utilizadores ORDER BY id DESC";
+                        $resultado = $db->query($query);
+                        $linhas = $resultado->fetchAll(PDO::FETCH_ASSOC);
 
-            <button type="submit" class="btn-submeter">Publicar Oferta no Catálogo</button>
-        </form>
-    </div>
-
-    <div class="seccao-admin">
-        <h2>📋 Monitorização de Utilizadores e Últimos Acessos</h2>
-        <p style="font-size: 13px; color: #666;">Dados carregados em tempo real a partir do servidor SQLite3 (<code>hshotels.db</code>).</p>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username / Nome</th>
-                    <th>Email do Cliente</th>
-                    <th>Data do Último Acesso</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                try {
-                    // Ligar à mesma base de dados SQLite3 criada no novoregistro.php (Ponto 6)
-                    $db = new PDO("sqlite:hshotels.db");
-                    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                    // Executar a consulta para ler os dados guardados (Leitura - Ponto 7.a e 8.c)
-                    $query = "SELECT id, username, email, ultimo_acesso FROM utilizadores ORDER BY id DESC";
-                    $resultado = $db->query($query);
-
-                    // Verificar se existem utilizadores na tabela
-                    $linhas = $resultado->fetchAll(PDO::FETCH_ASSOC);
-
-                    if (count($linhas) > 0) {
-                        foreach ($linhas as $linha) {
-                            echo "<tr>";
-                            echo "<td><strong>#" . htmlspecialchars($linha['id']) . "</strong></td>";
-                            echo "<td>" . htmlspecialchars($linha['username']) . "</td>";
-                            echo "<td>" . htmlspecialchars($linha['email']) . "</td>";
-                            echo "<td>" . htmlspecialchars($linha['ultimo_acesso'] ?? 'Sem registo') . "</td>";
-                            echo "</tr>";
+                        // 3. Se existirem dados na BD, gera as linhas HTML
+                        if (count($linhas) > 0) {
+                            foreach ($linhas as $linha) {
+                                echo "<tr>";
+                                // Mostra o username e adiciona a data de acesso por baixo do nome como extra de debug
+                                echo "<td>" . htmlspecialchars($linha['username']) . "<p><small>Acesso: " . htmlspecialchars($linha['ultimo_acesso'] ?? 'N/A') . "</small></p></td>";
+                                echo "<td>" . htmlspecialchars($linha['email']) . "</td>";
+                                echo "<td><a href='#' class='link-remover'>Remover</a></td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            // Se a base de dados estiver limpa
+                            echo "<tr><td colspan='3' style='text-align: center; color: #999; padding: 20px;'>Nenhum utilizador registado na Base de Dados.</td></tr>";
                         }
-                    } else {
-                        echo "<tr><td colspan='4' class='sem-dados'>Ainda não existem clientes registados na Base de Dados.</td></tr>";
-                    }
 
-                } catch (PDOException $e) {
-                    echo "<tr><td colspan='4' style='color: red; font-weight: bold;'>Erro ao aceder ao SQLite3: " . $e->getMessage() . "</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+                    } catch (PDOException $e) {
+                        // Caso haja algum erro na leitura do ficheiro .db
+                        echo "<tr><td colspan='3' style='color: red; font-weight: bold;'>Erro SQLite3: " . $e->getMessage() . "</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cartao-admin">
+            <h2>Lista de Ofertas (Catálogo)</h2>
+            <a href="#" class="btn-adicionar">+ Adicionar Nova Oferta</a>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Oferta / Descrição</th>
+                        <th>Preço</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>Hotel Praia Azul</strong>
+                            <p>Localização fantástica em frente ao mar, inclui p...</p>
+                        </td>
+                        <td>85€</td>
+                        <td>
+                            <a href="#" class="link-remover">Remover</a>
+                            <a href="#" class="link-editar">Editar</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Resort Serra Verde</strong>
+                            <p>Desconexão total no meio da natureza com trilh...</p>
+                        </td>
+                        <td>130€</td>
+                        <td>
+                            <a href="#" class="link-remover">Remover</a>
+                            <a href="#" class="link-editar">Editar</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>The Vannah</strong>
+                            <p>65</p>
+                        </td>
+                        <td>58€</td>
+                        <td>
+                            <a href="#" class="link-remover">Remover</a>
+                            <a href="#" class="link-editar">Editar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
-</div>
 
 </body>
 </html>
