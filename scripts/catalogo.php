@@ -39,6 +39,10 @@ $ofertas = $resultado->fetchAll(PDO::FETCH_ASSOC);
             margin: 0;
             font-size: 24px;
         }
+        .header-botoes {
+            display: flex;
+            gap: 15px;
+        }
         .btn-admin {
             background-color: #ff1e00;
             color: #fff;
@@ -46,9 +50,22 @@ $ofertas = $resultado->fetchAll(PDO::FETCH_ASSOC);
             padding: 10px 15px;
             border-radius: 4px;
             font-weight: bold;
+            transition: background 0.2s;
         }
         .btn-admin:hover {
             background-color: #d61800;
+        }
+        .btn-marketing {
+            background-color: #2196F3;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-marketing:hover {
+            background-color: #0b7dda;
         }
         .container {
             max-width: 1200px;
@@ -101,13 +118,22 @@ $ofertas = $resultado->fetchAll(PDO::FETCH_ASSOC);
             background: #fff;
             border-radius: 10px;
         }
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>HS Hotels</h1>
-        <a href="administrador.php" class="btn-admin">Painel Admin</a>
+        <div class="header-botoes">
+            <a href="agentemarketing.html" class="btn-marketing">Agente de Marketing</a>
+            <a href="administrador.php" class="btn-admin">Painel Admin</a>
+        </div>
     </div>
 
     <div class="container">
