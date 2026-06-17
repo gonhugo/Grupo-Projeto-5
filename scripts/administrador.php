@@ -1,3 +1,64 @@
+<?php
+$db = new PDO("sqlite:hshotels.db");
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$db->exec("CREATE TABLE IF NOT EXISTS utilizadores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL,
+    password TEXT NOT NULL,
+    ultimo_acesso TEXT
+)");
+
+$db->exec("CREATE TABLE IF NOT EXISTS ofertas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    descricao TEXT NOT NULL,
+    preco REAL NOT NULL
+)");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['adicionar_utilizador'])) {
+        $username = trim($_POST['nome_completo'] ?? '');
+        $email = trim($_POST['email_utilizador'] ?? '');
+        $password = trim($_POST['password_utilizador'] ?? '');
+        
+        if (!empty($username) && !empty($email) && !empty($password)) {
+            $stmtCheck = $db->prepare("SELECT COUNT(*) FROM utilizadores WHERE username = :username");
+            $stmtCheck->execute([':username' => $username]);
+            
+            if ($stmtCheck->fetchColumn() == 0) {
+                $stmt = $db->prepare("INSERT INTO utilizadores (username, email, password, ultimo_acesso) VALUES (:username, :email, :password, :ultimo_acesso)");
+                $stmt->execute([
+                    ':username' => $username,
+                    ':email' => $email,
+                    ':password' => $password,
+                    ':ultimo_acesso' => date('Y-m-d H:i:s')
+                ]);
+            }
+        }
+        header("Location: administrador.php");
+        exit();
+    }
+
+    if (isset($_POST['adicionar_oferta'])) {
+        $titulo = trim($_POST['titulo_oferta'] ?? '');
+        $descricao = trim($_POST['descricao_oferta'] ?? '');
+        $preco = floatval($_POST['preco_oferta'] ?? 0);
+        
+        if (!empty($titulo) && !empty($descricao) && $preco > 0) {
+            $stmt = $db->prepare("INSERT INTO ofertas (titulo, descricao, preco) VALUES (:titulo, :descricao, :preco)");
+            $stmt->execute([
+                ':titulo' => $titulo,
+                ':descricao' => $descricao,
+                ':preco' => $preco
+            ]);
+        }
+        header("Location: administrador.php");
+        exit();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
@@ -103,6 +164,66 @@
         .link-editar:hover {
             text-decoration: underline;
         }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .fechar {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .fechar:hover {
+            color: #000;
+        }
+        .modal-content h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .campo-form {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        .btn-submit {
+            width: 100%;
+            background-color: #ff1e00;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        .btn-submit:hover {
+            background-color: #d61800;
+        }
+
         @media (max-width: 900px) {
             .painel-container {
                 flex-direction: column;
@@ -123,7 +244,7 @@
 
         <div class="cartao-admin">
             <h2>Lista de Utilizadores</h2>
-            <a href="index.html" class="btn-adicionar">+ Adicionar Utilizador</a>
+            <button onclick="abrirModal('modalUtilizador')" class="btn-adicionar">+ Adicionar Utilizador</button>
 
             <table>
                 <thead>
@@ -135,37 +256,20 @@
                 </thead>
                 <tbody>
                     <?php
-                    try {
-                        $db = new PDO("sqlite:hshotels.db");
-                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $query = "SELECT username, email, ultimo_acesso FROM utilizadores ORDER BY id DESC";
+                    $resultado = $db->query($query);
+                    $linhas = $resultado->fetchAll(PDO::FETCH_ASSOC);
 
-                        $queryTabela = "CREATE TABLE IF NOT EXISTS utilizadores (
-                            id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            username TEXT NOT NULL UNIQUE,
-                            email TEXT NOT NULL,
-                            password TEXT NOT NULL,
-                            ultimo_acesso TEXT
-                        )";
-                        $db->exec($queryTabela);
-
-                        $query = "SELECT username, email, ultimo_acesso FROM utilizadores ORDER BY id DESC";
-                        $resultado = $db->query($query);
-                        $linhas = $resultado->fetchAll(PDO::FETCH_ASSOC);
-
-                        if (count($linhas) > 0) {
-                            foreach ($linhas as $linha) {
-                                echo "<tr>";
-                                echo "<td>" . htmlspecialchars($linha['username']) . "<p><small>Acesso: " . htmlspecialchars($linha['ultimo_acesso'] ?? 'N/A') . "</small></p></td>";
-                                echo "<td>" . htmlspecialchars($linha['email']) . "</td>";
-                                echo "<td><a href='#' class='link-remover'>Remover</a></td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='3' style='text-align: center; color: #999; padding: 20px;'>Nenhum utilizador registado na Base de Dados.</td></tr>";
+                    if (count($linhas) > 0) {
+                        foreach ($linhas as $linha) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($linha['username']) . "<p><small>Acesso: " . htmlspecialchars($linha['ultimo_acesso'] ?? 'N/A') . "</small></p></td>";
+                            echo "<td>" . htmlspecialchars($linha['email']) . "</td>";
+                            echo "<td><a href='#' class='link-remover'>Remover</a></td>";
+                            echo "</tr>";
                         }
-
-                    } catch (PDOException $e) {
-                        echo "<tr><td colspan='3' style='color: red; font-weight: bold;'>Erro SQLite3: " . $e->getMessage() . "</td></tr>";
+                    } else {
+                        echo "<tr><td colspan='3' style='text-align: center; color: #999; padding: 20px;'>Nenhum utilizador registado.</td></tr>";
                     }
                     ?>
                 </tbody>
@@ -174,7 +278,7 @@
 
         <div class="cartao-admin">
             <h2>Lista de Ofertas (Catálogo)</h2>
-            <a href="inseriroferta.html" class="btn-adicionar">+ Adicionar Nova Oferta</a>
+            <button onclick="abrirModal('modalOferta')" class="btn-adicionar">+ Adicionar Nova Oferta</button>
 
             <table>
                 <thead>
@@ -185,44 +289,71 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <strong>Hotel Praia Azul</strong>
-                            <p>Localização fantástica em frente ao mar, inclui p...</p>
-                        </td>
-                        <td>85€</td>
-                        <td>
-                            <a href="#" class="link-remover">Remover</a>
-                            <a href="#" class="link-editar">Editar</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Resort Serra Verde</strong>
-                            <p>Desconexão total no meio da natureza com trilh...</p>
-                        </td>
-                        <td>130€</td>
-                        <td>
-                            <a href="#" class="link-remover">Remover</a>
-                            <a href="#" class="link-editar">Editar</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>The Vannah</strong>
-                            <p>65</p>
-                        </td>
-                        <td>58€</td>
-                        <td>
-                            <a href="#" class="link-remover">Remover</a>
-                            <a href="#" class="link-editar">Editar</a>
-                        </td>
-                    </tr>
+                    <?php
+                    $queryOfertas = "SELECT titulo, descricao, preco FROM ofertas ORDER BY id DESC";
+                    $resultadoOfertas = $db->query($queryOfertas);
+                    $linhasOfertas = $resultadoOfertas->fetchAll(PDO::FETCH_ASSOC);
+
+                    if (count($linhasOfertas) > 0) {
+                        foreach ($linhasOfertas as $oferta) {
+                            echo "<tr>";
+                            echo "<td><strong>" . htmlspecialchars($oferta['titulo']) . "</strong><p>" . htmlspecialchars($oferta['descricao']) . "</p></td>";
+                            echo "<td>" . number_format($oferta['preco'], 2) . "€</td>";
+                            echo "<td><a href='#' class='link-remover'>Remover</a><a href='#' class='link-editar'>Editar</a></td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='3' style='text-align: center; color: #999; padding: 20px;'>Nenhuma oferta registada no catálogo.</td></tr>";
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
 
     </div>
 
+    <div id="modalUtilizador" class="modal">
+        <div class="modal-content">
+            <span class="fechar" onclick="fecharModal('modalUtilizador')">&times;</span>
+            <h3>Adicionar Novo Utilizador</h3>
+            <form action="administrador.php" method="POST">
+                <input type="hidden" name="adicionar_utilizador" value="1">
+                <input type="text" name="nome_completo" class="campo-form" placeholder="Nome Completo" required>
+                <input type="email" name="email_utilizador" class="campo-form" placeholder="Email" required>
+                <input type="password" name="password_utilizador" class="campo-form" placeholder="Password" required>
+                <button type="submit" class="btn-submit">Registar Utilizador</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalOferta" class="modal">
+        <div class="modal-content">
+            <span class="fechar" onclick="fecharModal('modalOferta')">&times;</span>
+            <h3>Adicionar Nova Oferta</h3>
+            <form action="administrador.php" method="POST">
+                <input type="hidden" name="adicionar_oferta" value="1">
+                <input type="text" name="titulo_oferta" class="campo-form" placeholder="Nome do Hotel / Quarto" required>
+                <textarea name="descricao_oferta" class="campo-form" rows="3" placeholder="Descrição da oferta..." required></textarea>
+                <input type="number" name="preco_oferta" class="campo-form" step="0.01" placeholder="Preço por noite (€)" required>
+                <button type="submit" class="btn-submit">Publicar Oferta</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirModal(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function fecharModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
