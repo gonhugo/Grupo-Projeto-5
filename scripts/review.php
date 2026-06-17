@@ -21,6 +21,6 @@
         echo "<p style='color: red;'>Aviso: Acedeu diretamente ao script sem enviar dados.</p>";
     }
     ?>
-    <br><a href="catalogo.html">Ir para o Catálogo</a>
+    <br><a href="catalogo.php">Ir para o Catálogo</a>
 </body>
 </html>
