@@ -11,24 +11,28 @@ $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::F
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <title>Marketing</title>
+    <title>Agente de Marketing - HS Hotels</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; }
-        .header { background-color: #111; color: #fff; padding: 20px; }
-        .container { max-width: 1200px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f2f5; margin: 0; }
+        .header { background-color: #111; color: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 10px; border-bottom: 1px solid #eee; text-align: left; }
     </style>
 </head>
 <body>
-    <div class="header"><h1>Agente de Marketing</h1></div>
+    <div class="header">
+        <h1>Agente de Marketing</h1>
+        <a href="catalogo.php" style="color: white; text-decoration: none; font-weight: bold;">Voltar ao Catálogo</a>
+    </div>
     <div class="container">
-        <a href="catalogo.php">Voltar ao Catálogo</a>
         <table>
-            <thead><tr><th>Oferta</th><th>Preço</th><th>Alterar Preço</th></tr></thead>
+            <thead><tr><th>Oferta</th><th>Preço Atual</th><th>Alterar Preço</th></tr></thead>
             <tbody>
                 <?php foreach ($ofertas as $o): ?>
                     <tr>
-                        <td><?php echo $o['titulo']; ?></td>
-                        <td><?php echo $o['preco']; ?>€</td>
+                        <td><strong><?php echo htmlspecialchars($o['titulo']); ?></strong></td>
+                        <td><?php echo number_format($o['preco'], 2); ?>€</td>
                         <td>
                             <form method="POST">
                                 <input type="hidden" name="atualizar_preco" value="1">
