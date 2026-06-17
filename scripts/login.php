@@ -23,11 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($username) && !empty($password)) {
         try {
-            // Ligar à Base de Dados SQLite3
             $db = new PDO("sqlite:hshotels.db");
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            // Procurar o utilizador com a password correspondente 
             $query = "SELECT id, username FROM utilizadores WHERE username = :username AND password = :password";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':username', $username);
@@ -37,9 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $utilizador = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($utilizador) {
-                // Se encontrou o utilizador, o Login é válido!
-                
-                // 3. Registar o dia e hora deste acesso (Ponto 8.b)
                 $dataAtual = date('Y-m-d H:i:s');
                 $updateQuery = "UPDATE utilizadores SET ultimo_acesso = :ultimo_acesso WHERE id = :id";
                 $stmtUpdate = $db->prepare($updateQuery);

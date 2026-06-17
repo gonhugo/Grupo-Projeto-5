@@ -19,9 +19,6 @@
 try {
     $db = new PDO("sqlite:hshotels.db");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Criar a tabela se ela não existir (Ponto 6.a)
-    // Já inclui o campo 'ultimo_acesso' pedido no Ponto 8.b
     $queryTabela = "CREATE TABLE IF NOT EXISTS utilizadores (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
@@ -37,14 +34,12 @@ try {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recolha e higienização dos dados do formulário index.html
     $username = isset($_POST['nome_completo']) ? trim($_POST['nome_completo']) : '';
     $email = isset($_POST['email_utilizador']) ? trim($_POST['email_utilizador']) : '';
     $password = isset($_POST['password_utilizador']) ? trim($_POST['password_utilizador']) : '';
 
     if (!empty($username) && !empty($email) && !empty($password)) {
         try {
-            // Verificar primeiro se o Username já existe (Como pede a tua tabela da USR1)
             $stmtCheck = $db->prepare("SELECT COUNT(*) FROM utilizadores WHERE username = :username");
             $stmtCheck->bindParam(':username', $username);
             $stmtCheck->execute();
@@ -53,10 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "<h2 class='erro'>✕ Erro no Registo</h2>";
                 echo "<p>O nome de utilizador <strong>$username</strong> já se encontra registado. Escolha outro.</p>";
             } else {
-                // Inserir o novo utilizador na base de dados SQLite3 (Escrita - Ponto 7.a)
                 $stmtInsert = $db->prepare("INSERT INTO utilizadores (username, email, password, ultimo_acesso) VALUES (:username, :email, :password, :ultimo_acesso)");
-                
-                // Registar a hora atual como o primeiro acesso (Ponto 8.b)
+
                 $dataAtual = date('Y-m-d H:i:s');
                 
                 $stmtInsert->bindParam(':username', $username);
