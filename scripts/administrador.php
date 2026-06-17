@@ -2,6 +2,7 @@
 $db = new PDO("sqlite:" . __DIR__ . "/hshotels.db");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+// NOTA: Certifica-te que o teu 'novoregistro.php' usa o nome de tabela 'utilizadores'
 $db->exec("CREATE TABLE IF NOT EXISTS utilizadores (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, email TEXT NOT NULL)");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -25,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <thead><tr><th>Nome</th><th>Email</th></tr></thead>
             <tbody>
                 <?php
+                // Esta consulta lê da tabela 'utilizadores'
                 $utilizadores = $db->query("SELECT * FROM utilizadores ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($utilizadores as $u) {
                     echo "<tr><td>{$u['nome']}</td><td>{$u['email']}</td></tr>";

@@ -54,12 +54,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 $stmtInsert->bindParam(':username', $username);
                 $stmtInsert->bindParam(':email', $email);
-                $stmtInsert->bindParam(':password', $password); // Nota: Em produção usaria-se password_hash
+                $stmtInsert->bindParam(':password', $password); 
                 $stmtInsert->bindParam(':ultimo_acesso', $dataAtual);
                 
                 $stmtInsert->execute();
 
-                echo "<h2 class='sucesso'>✓ Registado com Sucesso!</h2>";
+                echo "<h2 class='sucesso'>Registado com Sucesso!</h2>";
                 echo "<p>Bem-vindo, <strong>$username</strong>. Os teus dados foram guardados na base de dados SQLite3.</p>";
                 echo "<p><small>Data do primeiro acesso gravada: $dataAtual</small></p>";
             }
