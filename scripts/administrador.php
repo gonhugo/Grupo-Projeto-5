@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['adicionar_oferta'])) {
 <body>
     <div class="header">
         <h1>Administrador</h1>
-        <a href="catalogo.php" style="color: white; text-decoration: none; font-weight: bold;">Ir para o Catálogo</a>
+        <a href="catalogo.php" style="color: white; text-decoration: none; font-weight: bold;">Voltar ao Catálogo</a>
     </div>
     <div class="container">
         <h2>Gestão de Ofertas</h2>

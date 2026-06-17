@@ -27,17 +27,25 @@ $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::F
     </div>
     <div class="container">
         <table>
-            <thead><tr><th>Oferta</th><th>Preço Atual</th><th>Alterar Preço</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Oferta</th>
+                    <th>Preço Atual</th>
+                    <th>Preço Antigo</th>
+                    <th>Alterar Preço</th>
+                </tr>
+            </thead>
             <tbody>
                 <?php foreach ($ofertas as $o): ?>
                     <tr>
                         <td><strong><?php echo htmlspecialchars($o['titulo']); ?></strong></td>
                         <td><?php echo number_format($o['preco'], 2); ?>€</td>
+                        <td><?php echo $o['preco_antigo'] ? number_format($o['preco_antigo'], 2) . "€" : "-"; ?></td>
                         <td>
                             <form method="POST">
                                 <input type="hidden" name="atualizar_preco" value="1">
                                 <input type="hidden" name="id_oferta" value="<?php echo $o['id']; ?>">
-                                <input type="number" name="novo_preco" step="0.01" required>
+                                <input type="number" name="novo_preco" step="0.01" required style="width: 80px;">
                                 <button type="submit">Alterar</button>
                             </form>
                         </td>
