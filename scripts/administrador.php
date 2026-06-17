@@ -2,13 +2,9 @@
 $db = new PDO("sqlite:" . __DIR__ . "/hshotels.db");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$db->exec("CREATE TABLE IF NOT EXISTS ofertas (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    titulo TEXT NOT NULL,
-    descricao TEXT NOT NULL,
-    preco REAL NOT NULL,
-    preco_antigo REAL
-)");
+// Garante que as tabelas existem
+$db->exec("CREATE TABLE IF NOT EXISTS utilizadores (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT)");
+$db->exec("CREATE TABLE IF NOT EXISTS ofertas (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT, descricao TEXT, preco REAL, preco_antigo REAL)");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['adicionar_oferta'])) {
@@ -27,50 +23,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <title>Painel do Administrador</title>
+    <title>Administrador</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; }
-        .header { background-color: #111; color: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-nav { background: #ff1e00; color: #fff; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; }
-        .painel-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
-        .cartao-admin { background-color: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .campo-form { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; }
+        .header { background-color: #111; color: #fff; padding: 20px; }
+        .container { max-width: 1200px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 14px 10px; border-bottom: 1px solid #eee; text-align: left; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Administrador</h1>
-        <a href="catalogo.php" class="btn-nav">Ir para o Catálogo</a>
-    </div>
-    <div class="painel-container">
-        <div class="cartao-admin">
-            <h2>Gestão de Ofertas</h2>
-            <form method="POST">
-                <input type="hidden" name="adicionar_oferta" value="1">
-                <input type="text" name="titulo_oferta" class="campo-form" placeholder="Título" required>
-                <input type="text" name="descricao_oferta" class="campo-form" placeholder="Descrição" required>
-                <input type="number" name="preco_oferta" step="0.01" class="campo-form" placeholder="Preço" required>
-                <button type="submit" style="background:#ff1e00; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer;">Adicionar</button>
-            </form>
-            <table>
-                <thead><tr><th>Oferta</th><th>Preço Atual</th><th>Ações</th></tr></thead>
-                <tbody>
-                    <?php
-                    $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
-                    foreach ($ofertas as $o) {
-                        echo "<tr><td><strong>{$o['titulo']}</strong><br><small>{$o['descricao']}</small></td><td>{$o['preco']}€</td><td>
-                              <form method='POST'>
-                              <input type='hidden' name='atualizar_preco' value='1'>
-                              <input type='hidden' name='id_oferta' value='{$o['id']}'>
-                              <input type='number' name='novo_preco' step='0.01' class='campo-form' style='width:80px;' required>
-                              <button type='submit'>Alterar</button></form></td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
+    <div class="header"><h1>Administrador</h1></div>
+    <div class="container">
+        <a href="catalogo.php">Ir para o Catálogo</a>
+        <h2>Gestão de Ofertas</h2>
+        <form method="POST">
+            <input type="hidden" name="adicionar_oferta" value="1">
+            <input type="text" name="titulo_oferta" placeholder="Título" required>
+            <input type="text" name="descricao_oferta" placeholder="Descrição" required>
+            <input type="number" name="preco_oferta" step="0.01" placeholder="Preço" required>
+            <button type="submit" style="background:red; color:white;">Adicionar</button>
+        </form>
+        <table>
+            <thead><tr><th>Oferta</th><th>Preço Atual</th><th>Preço Antigo</th></tr></thead>
+            <tbody>
+                <?php
+                $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($ofertas as $o) {
+                    echo "<tr><td>{$o['titulo']}</td><td>{$o['preco']}€</td><td>" . ($o['preco_antigo'] ?? '-') . "€</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
