@@ -12,7 +12,6 @@
             padding: 20px;
             color: #333;
         }
-
         h1.titulo-admin {
             text-align: center;
             font-size: 28px;
@@ -20,7 +19,6 @@
             margin-bottom: 30px;
             color: #000;
         }
-
         .painel-container {
             display: flex;
             flex-direction: row;
@@ -30,7 +28,6 @@
             max-width: 1300px;
             margin: 0 auto;
         }
-
         .cartao-admin {
             background-color: #ffffff;
             border-radius: 12px;
@@ -40,7 +37,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             box-sizing: border-box;
         }
-
         .cartao-admin h2 {
             font-size: 22px;
             margin-top: 0;
@@ -48,8 +44,6 @@
             color: #000;
             font-weight: bold;
         }
-
-        
         .btn-adicionar {
             display: inline-block;
             background-color: #ff1e00;
@@ -64,18 +58,14 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-
         .btn-adicionar:hover {
             background-color: #d61800;
         }
-
-        /* Tabelas */
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
         }
-
         th {
             background-color: #f8f9fa;
             color: #666;
@@ -84,7 +74,6 @@
             font-weight: 600;
             border-bottom: 1px solid #eeeeee;
         }
-
         td {
             padding: 14px 10px;
             font-size: 14px;
@@ -92,36 +81,28 @@
             border-bottom: 1px solid #f6f6f6;
             vertical-align: top;
         }
-
         td p {
             margin: 4px 0 0 0;
             font-size: 12px;
             color: #777;
         }
-
-        
         .link-remover {
             color: #ff1e00;
             text-decoration: none;
             font-weight: 500;
         }
-
         .link-remover:hover {
             text-decoration: underline;
         }
-
         .link-editar {
             color: #000000;
             text-decoration: none;
             font-weight: 500;
             margin-left: 10px;
         }
-
         .link-editar:hover {
             text-decoration: underline;
         }
-
-        
         @media (max-width: 900px) {
             .painel-container {
                 flex-direction: column;
@@ -142,7 +123,7 @@
 
         <div class="cartao-admin">
             <h2>Lista de Utilizadores</h2>
-            <a href="#" class="btn-adicionar">+ Adicionar Utilizador</a>
+            <a href="index.html" class="btn-adicionar">+ Adicionar Utilizador</a>
 
             <table>
                 <thead>
@@ -155,16 +136,22 @@
                 <tbody>
                     <?php
                     try {
-                        
                         $db = new PDO("sqlite:hshotels.db");
                         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                        
+                        $queryTabela = "CREATE TABLE IF NOT EXISTS utilizadores (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            username TEXT NOT NULL UNIQUE,
+                            email TEXT NOT NULL,
+                            password TEXT NOT NULL,
+                            ultimo_acesso TEXT
+                        )";
+                        $db->exec($queryTabela);
+
                         $query = "SELECT username, email, ultimo_acesso FROM utilizadores ORDER BY id DESC";
                         $resultado = $db->query($query);
                         $linhas = $resultado->fetchAll(PDO::FETCH_ASSOC);
 
-                        
                         if (count($linhas) > 0) {
                             foreach ($linhas as $linha) {
                                 echo "<tr>";
@@ -174,12 +161,10 @@
                                 echo "</tr>";
                             }
                         } else {
-                            
                             echo "<tr><td colspan='3' style='text-align: center; color: #999; padding: 20px;'>Nenhum utilizador registado na Base de Dados.</td></tr>";
                         }
 
                     } catch (PDOException $e) {
-                        // Caso haja algum erro na leitura do ficheiro .db
                         echo "<tr><td colspan='3' style='color: red; font-weight: bold;'>Erro SQLite3: " . $e->getMessage() . "</td></tr>";
                     }
                     ?>
@@ -189,7 +174,7 @@
 
         <div class="cartao-admin">
             <h2>Lista de Ofertas (Catálogo)</h2>
-            <a href="#" class="btn-adicionar">+ Adicionar Nova Oferta</a>
+            <a href="inseriroferta.html" class="btn-adicionar">+ Adicionar Nova Oferta</a>
 
             <table>
                 <thead>
