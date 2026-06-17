@@ -73,12 +73,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 20px;
             color: #333;
         }
-        h1.titulo-admin {
-            text-align: center;
+        .cabecalho-admin {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto 30px auto;
+            padding: 0 10px;
+        }
+        .cabecalho-admin h1 {
+            margin: 0;
             font-size: 28px;
             font-weight: bold;
-            margin-bottom: 30px;
             color: #000;
+        }
+        .btn-voltar {
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .btn-voltar:hover {
+            background-color: #111;
         }
         .painel-container {
             display: flex;
@@ -164,7 +184,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .link-editar:hover {
             text-decoration: underline;
         }
-        
         .modal {
             display: none;
             position: fixed;
@@ -223,7 +242,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .btn-submit:hover {
             background-color: #d61800;
         }
-
         @media (max-width: 900px) {
             .painel-container {
                 flex-direction: column;
@@ -233,12 +251,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 width: 100%;
                 min-width: unset;
             }
+            .cabecalho-admin {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1 class="titulo-admin">Olá Administrador</h1>
+    <div class="cabecalho-admin">
+        <h1>Olá Administrador</h1>
+        <a href="catalogo.php" class="btn-voltar">Ir para o Catálogo</a>
+    </div>
 
     <div class="painel-container">
 
