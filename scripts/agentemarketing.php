@@ -6,18 +6,20 @@ $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::F
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
-    <title>Marketing - HS Hotels</title>
+    <title>Painel de Marketing</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; padding: 20px; }
-        .painel { max-width: 1000px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; }
+        .header { background-color: #111; color: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-nav { background: #ff1e00; color: #fff; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; }
+        .painel { max-width: 1000px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 14px 10px; border-bottom: 1px solid #f6f6f6; text-align: left; }
     </style>
 </head>
 <body>
-    <div style="max-width:1000px; margin:0 auto 20px auto;">
-        <h1>Agente de Marketing</h1>
-        <a href="catalogo.php">Voltar ao Catálogo</a>
+    <div class="header">
+        <h1>Painel de Marketing</h1>
+        <a href="catalogo.php" class="btn-nav">Voltar ao Catálogo</a>
     </div>
     <div class="painel">
         <table>
