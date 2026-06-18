@@ -12,70 +12,41 @@
     </style>
 </head>
 <body>
-
 <div class="mensagem-box">
 <?php
-
-try {
-    $db = new PDO("sqlite:hshotels.db");
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $queryTabela = "CREATE TABLE IF NOT EXISTS utilizadores (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL UNIQUE,
-        email TEXT NOT NULL,
-        password TEXT NOT NULL,
-        ultimo_acesso TEXT
-    )";
-    $db->exec($queryTabela);
-
-} catch (PDOException $e) {
-    echo "<h3 class='erro'>Erro de ligação à Base de Dados: " . $e->getMessage() . "</h3>";
-    exit();
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = isset($_POST['nome_completo']) ? trim($_POST['nome_completo']) : '';
-    $email = isset($_POST['email_utilizador']) ? trim($_POST['email_utilizador']) : '';
-    $password = isset($_POST['password_utilizador']) ? trim($_POST['password_utilizador']) : '';
-
+    $username = trim($_POST['username_utilizador'] ?? '');
+    $email = trim($_POST['email_utilizador'] ?? '');
+    $password = trim($_POST['password_utilizador'] ?? '');
     if (!empty($username) && !empty($email) && !empty($password)) {
         try {
-            $stmtCheck = $db->prepare("SELECT COUNT(*) FROM utilizadores WHERE username = :username");
+            $db = new PDO("sqlite:" . __DIR__ . "/hshotels.db");
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db->exec("CREATE TABLE IF NOT EXISTS utilizadores (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL, password TEXT NOT NULL, ultimo_acesso TEXT)");
+            $stmtCheck = $db->prepare("SELECT * FROM utilizadores WHERE username = :username");
             $stmtCheck->bindParam(':username', $username);
             $stmtCheck->execute();
-            
-            if ($stmtCheck->fetchColumn() > 0) {
-                echo "<h2 class='erro'>✕ Erro no Registo</h2>";
-                echo "<p>O nome de utilizador <strong>$username</strong> já se encontra registado. Escolha outro.</p>";
+            if ($stmtCheck->fetch()) {
+                echo "<h2 class='erro'>✕ Erro no Registo</h2><p>O nome de utilizador <strong>$username</strong> já se encontra registado.</p>";
             } else {
                 $stmtInsert = $db->prepare("INSERT INTO utilizadores (username, email, password, ultimo_acesso) VALUES (:username, :email, :password, :ultimo_acesso)");
-
                 $dataAtual = date('Y-m-d H:i:s');
-                
                 $stmtInsert->bindParam(':username', $username);
                 $stmtInsert->bindParam(':email', $email);
-                $stmtInsert->bindParam(':password', $password); 
+                $stmtInsert->bindParam(':password', $password);
                 $stmtInsert->bindParam(':ultimo_acesso', $dataAtual);
-                
                 $stmtInsert->execute();
-
-                echo "<h2 class='sucesso'>Registado com Sucesso!</h2>";
-                echo "<p>Bem-vindo, <strong>$username</strong>. Os teus dados foram guardados na base de dados SQLite3.</p>";
-                echo "<p><small>Data do primeiro acesso gravada: $dataAtual</small></p>";
+                echo "<h2 class='sucesso'>Registado com Sucesso!</h2><p>Bem-vindo, <strong>$username</strong>.</p>";
             }
         } catch (PDOException $e) {
-            echo "<h3 class='erro'>Erro ao guardar os dados: " . $e->getMessage() . "</h3>";
+            echo "<h3 class='erro'>Erro: " . $e->getMessage() . "</h3>";
         }
     } else {
-        echo "<h3 class='erro'>Por favor, preencha todos os campos do formulário.</h3>";
+        echo "<h3 class='erro'>Por favor, preencha todos os campos.</h3>";
     }
-} else {
-    echo "<h3 class='erro'>Acesso inválido ao script.</h3>";
 }
 ?>
-<br>
-<a href="index.html" class="btn">Voltar ao Início</a>
+<br><a href="catalogo.php" class="btn">Ir para o Catálogo</a>
 </div>
-
 </body>
 </html>
