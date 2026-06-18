@@ -3,21 +3,22 @@ $db = new PDO("sqlite:" . __DIR__ . "/hshotels.db");
 $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
 
 // Map offer IDs to their image filenames
+// catalogo.php está em /scripts/, imagens estão em /images/ (nível acima)
 $imagensOfertas = [
-    1  => 'images/portocoimbra.webp',   // Hotel Maia (Porto area)
-    2  => 'images/The_Vannah.webp',     // Hotel The Vannah
-    3  => 'images/Tartarus.webp',       // Hotel Tartarus
-    4  => 'images/Citadel.webp',        // Hotel Citadel
-    5  => 'images/DelColorado.webp',    // Hotel Del Colorado
-    6  => 'images/Zanarkand.webp',      // Zanarkand Underwater City
-    7  => 'images/Anorlondo.webp',      // Anor Londo
-    8  => 'images/Ryanair.webp',        // Ryanair Portugal - UK
-    9  => 'images/easyjet.webp',        // Easyjet Portugal - EUA
-    10 => 'images/portocoimbra.webp',   // Viagem Porto - Coimbra
-    11 => 'images/Zanarkand.webp',      // Viagem para Zanarkand
-    12 => 'images/easyjet.webp',        // TAP Portugal Continental
-    13 => 'images/Ryanair.webp',        // Ryanair Portugal - New Vegas
-    14 => 'images/The_Vannah.webp',     // Hotel Vault 21
+    1  => '../images/portocoimbra.webp',   // Hotel Maia (Porto area)
+    2  => '../images/The_Vannah.webp',     // Hotel The Vannah
+    3  => '../images/Tartarus.webp',       // Hotel Tartarus
+    4  => '../images/Citadel.webp',        // Hotel Citadel
+    5  => '../images/DelColorado.webp',    // Hotel Del Colorado
+    6  => '../images/Zanarkand.webp',      // Zanarkand Underwater City
+    7  => '../images/Anorlondo.webp',      // Anor Londo
+    8  => '../images/Ryanair.webp',        // Ryanair Portugal - UK
+    9  => '../images/easyjet.webp',        // Easyjet Portugal - EUA
+    10 => '../images/portocoimbra.webp',   // Viagem Porto - Coimbra
+    11 => '../images/Zanarkand.webp',      // Viagem para Zanarkand
+    12 => '../images/easyjet.webp',        // TAP Portugal Continental
+    13 => '../images/Ryanair.webp',        // Ryanair Portugal - New Vegas
+    14 => '../images/The_Vannah.webp',     // Hotel Vault 21
 ];
 ?>
 <!DOCTYPE html>
@@ -254,7 +255,7 @@ $imagensOfertas = [
                     <?php endif; ?>
                 </div>
 
-                <a href="pagamento.html?id=<?php echo $id; ?>" class="btn-reservar">
+                <a href="pagamento.php?id=<?php echo $id; ?>" class="btn-reservar">
                     <?php echo $isViagem ? '✈ Reservar Viagem' : '🛏 Reservar Hotel'; ?>
                 </a>
             </div>
