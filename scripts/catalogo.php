@@ -6,7 +6,7 @@ $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::F
 // catalogo.php está em /scripts/, imagens estão em /images/ (nível acima)
 $imagensOfertas = [
     1  => '../images/portocoimbra.webp',   // Hotel Maia (Porto area)
-    2  => '../images/The_Vannah.webp',     // Hotel The Vannah
+    2  => '../images/TheVannah.webp',     // Hotel The Vannah
     3  => '../images/Tartarus.webp',       // Hotel Tartarus
     4  => '../images/Citadel.webp',        // Hotel Citadel
     5  => '../images/DelColorado.webp',    // Hotel Del Colorado
@@ -18,7 +18,7 @@ $imagensOfertas = [
     11 => '../images/Zanarkand.webp',      // Viagem para Zanarkand
     12 => '../images/easyjet.webp',        // TAP Portugal Continental
     13 => '../images/Ryanair.webp',        // Ryanair Portugal - New Vegas
-    14 => '../images/The_Vannah.webp',     // Hotel Vault 21
+    14 => '../images/vault21.webp',     // Hotel Vault 21
 ];
 ?>
 <!DOCTYPE html>
