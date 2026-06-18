@@ -2,8 +2,9 @@
 $db = new PDO("sqlite:" . __DIR__ . "/hshotels.db");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+// Criar tabelas com a estrutura unificada (igual ao novoregistro.php)
 $db->exec("CREATE TABLE IF NOT EXISTS ofertas (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT, descricao TEXT, preco REAL, preco_antigo REAL)");
-$db->exec("CREATE TABLE IF NOT EXISTS utilizadores (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, email TEXT NOT NULL)");
+$db->exec("CREATE TABLE IF NOT EXISTS utilizadores (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL, password TEXT NOT NULL, ultimo_acesso TEXT)");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['adicionar_oferta'])) {
@@ -12,8 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: administrador.php"); exit();
     }
     if (isset($_POST['adicionar_utilizador'])) {
-        $stmt = $db->prepare("INSERT INTO utilizadores (nome, email) VALUES (:n, :e)");
-        $stmt->execute([':n' => $_POST['nome_utilizador'], ':e' => $_POST['email_utilizador']]);
+        // Usa 'username' e define uma password padrão (ex: 12345) para utilizadores adicionados pelo admin
+        $stmt = $db->prepare("INSERT INTO utilizadores (username, email, password) VALUES (:u, :e, '12345')");
+        $stmt->execute([':u' => $_POST['nome_utilizador'], ':e' => $_POST['email_utilizador']]);
         header("Location: administrador.php"); exit();
     }
 }
@@ -71,12 +73,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <table>
-            <thead><tr><th>Nome</th><th>Email</th></tr></thead>
+            <thead><tr><th>Nome</th><th>Email</th><th>Último Acesso</th></tr></thead>
             <tbody>
                 <?php
                 $utilizadores = $db->query("SELECT * FROM utilizadores ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($utilizadores as $u) {
-                    echo "<tr><td>{$u['nome']}</td><td>{$u['email']}</td></tr>";
+                    // Prevenção extra caso o campo esteja vazio
+                    $nome = isset($u['username']) && !empty($u['username']) ? htmlspecialchars($u['username']) : 'Sem Nome';
+                    $email = isset($u['email']) && !empty($u['email']) ? htmlspecialchars($u['email']) : 'Sem Email';
+                    $ultimo_acesso = isset($u['ultimo_acesso']) && !empty($u['ultimo_acesso']) ? htmlspecialchars($u['ultimo_acesso']) : 'Nunca acedeu';
+                    
+                    echo "<tr><td>{$nome}</td><td>{$email}</td><td><small>{$ultimo_acesso}</small></td></tr>";
                 }
                 ?>
             </tbody>
