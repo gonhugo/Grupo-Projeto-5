@@ -1,15 +1,22 @@
 <?php
-// Configuração da ligação à base de dados oficial do teu sistema de login
 try {
-    $db = new PDO("sqlite:" . __DIR__ . "/hshotels.db");
+    $db = new PDO("sqlite:hshotels.db");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    try {
+        $db->query("SELECT username FROM utilizadores LIMIT 1");
+    } catch (Exception $e) {
+        $db->exec("DROP TABLE IF EXISTS utilizadores");
+    }
+
+    $db->exec("CREATE TABLE IF NOT EXISTS ofertas (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT, descricao TEXT, preco REAL, preco_antigo REAL)");
+    $db->exec("CREATE TABLE IF NOT EXISTS utilizadores (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL, password TEXT NOT NULL, ultimo_acesso TEXT)");
+
 } catch (PDOException $e) {
-    die("Erro ao ligar à base de dados: " . $e->getMessage());
+    die("Erro ao ligar ou estruturar a base de dados: " . $e->getMessage());
 }
 
-// Processamento dos Formulários (POST)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 1. Adicionar Oferta
     if (isset($_POST['adicionar_oferta'])) {
         try {
             $stmt = $db->prepare("INSERT INTO ofertas (titulo, descricao, preco, preco_antigo) VALUES (:t, :d, :p, NULL)");
@@ -25,12 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     
-    // 2. Adicionar Utilizador (Sincronizado com os campos de novoregistro.php)
     if (isset($_POST['adicionar_utilizador'])) {
         try {
             $username = trim($_POST['nome_utilizador']);
             $email = trim($_POST['email_utilizador']);
-            $password = "12345"; // Password padrão para novos registos via admin
+            $password = "12345"; 
             $dataAtual = date('Y-m-d H:i:s');
 
             $stmt = $db->prepare("INSERT INTO utilizadores (username, email, password, ultimo_acesso) VALUES (:username, :email, :password, :ultimo_acesso)");
@@ -122,12 +128,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                     }
                 } catch (PDOException $e) {
-                    echo "<tr><td colspan='3' style='color:red;'>Erro ao carregar ofertas: (A tabela 'ofertas' pode ainda não ter dados)</td></tr>";
+                    echo "<tr><td colspan='3' style='color:red;'>Erro ao carregar ofertas.</td></tr>";
                 }
                 ?>
             </tbody>
         </table>
-
 
         <h2>Gestão de Utilizadores</h2>
         <form method="POST">
@@ -165,7 +170,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                     }
                 } catch (PDOException $e) {
-                    echo "<tr><td colspan='3' style='color:red;'>Erro ao carregar utilizadores. Verifique se realizou algum registo prévio.</td></tr>";
+                    echo "<tr><td colspan='3' style='color:red;'>Erro ao carregar utilizadores.</td></tr>";
                 }
                 ?>
             </tbody>
