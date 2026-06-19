@@ -32,7 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Remover utilizador pelo email (a partir do campo de pesquisa no topo da secção)
+    if (isset($_POST['remover_oferta_id'])) {
+        try {
+            $stmt = $db->prepare("DELETE FROM ofertas WHERE id = :id");
+            $stmt->execute([':id' => $_POST['remover_oferta_id']]);
+            header("Location: administrador.php?oferta_removida=1");
+            exit();
+        } catch (PDOException $e) {
+            $erro = "Erro ao remover oferta: " . $e->getMessage();
+        }
+    }
+
     if (isset($_POST['remover_utilizador_email'])) {
         try {
             $emailRemover = trim($_POST['email_utilizador'] ?? '');
@@ -67,6 +77,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 if (isset($_GET['removido'])) {
     $sucesso = "Utilizador removido com sucesso.";
+}
+if (isset($_GET['oferta_removida'])) {
+    $sucesso = "Oferta removida com sucesso.";
 }
 ?>
 <!DOCTYPE html>
@@ -129,12 +142,18 @@ if (isset($_GET['removido'])) {
             <input type="number" name="preco_oferta" step="0.01" class="campo-form" placeholder="Preço (€)" required>
             <button type="submit" class="btn-adicionar">Adicionar Oferta</button>
         </form>
+        <form method="POST">
+            <input type="number" name="remover_oferta_id" class="campo-form" placeholder="ID da Oferta a remover" required>
+            <button type="submit" class="btn-remover-topo" onclick="return confirm('Tem a certeza que quer remover esta oferta?');">Remover Oferta</button>
+        </form>
         <table>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Oferta</th>
                     <th>Preço Atual</th>
                     <th>Preço Antigo</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -142,22 +161,30 @@ if (isset($_GET['removido'])) {
                 try {
                     $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
                     if (empty($ofertas)) {
-                        echo "<tr><td colspan='3' style='text-align:center; color:#999;'>Nenhuma oferta registada.</td></tr>";
+                        echo "<tr><td colspan='5' style='text-align:center; color:#999;'>Nenhuma oferta registada.</td></tr>";
                     } else {
                         foreach ($ofertas as $o) {
+                            $idOferta = (int)$o['id'];
                             $titulo = htmlspecialchars($o['titulo'] ?? '');
                             $desc = htmlspecialchars($o['descricao'] ?? '');
                             $preco = number_format((float)($o['preco'] ?? 0), 2) . "€";
                             $preco_antigo = !empty($o['preco_antigo']) ? number_format((float)$o['preco_antigo'], 2) . "€" : "-";
                             echo "<tr>";
+                            echo "<td>{$idOferta}</td>";
                             echo "<td><strong>{$titulo}</strong><br><span style='color:#666; font-size:12px;'>{$desc}</span></td>";
                             echo "<td>{$preco}</td>";
                             echo "<td>{$preco_antigo}</td>";
+                            echo "<td>
+                                    <form class='form-linha' method='POST' onsubmit='return confirm(\"Remover {$titulo}?\");'>
+                                        <input type='hidden' name='remover_oferta_id' value='{$idOferta}'>
+                                        <button type='submit' class='btn-remover-linha'>🗑 Remover</button>
+                                    </form>
+                                  </td>";
                             echo "</tr>";
                         }
                     }
                 } catch (PDOException $e) {
-                    echo "<tr><td colspan='3' style='color:red;'>Erro ao carregar ofertas.</td></tr>";
+                    echo "<tr><td colspan='5' style='color:red;'>Erro ao carregar ofertas.</td></tr>";
                 }
                 ?>
             </tbody>
