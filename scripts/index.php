@@ -2,7 +2,6 @@
 try {
     $db = new PDO("sqlite:" . __DIR__ . "/hshotels.db");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // Se a tabela existir numa versão antiga/incompatível (sem email/password), recria-a
     try {
         $db->query("SELECT username, email, password, ultimo_acesso FROM utilizadores LIMIT 1");
     } catch (Exception $e) {
@@ -23,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_login'])) {
     $password = trim($_POST['login_pass'] ?? '');
 
     if ($identificador !== '' && $password !== '') {
-        // Acesso de administrador (atalho fixo, não fica gravado na tabela utilizadores)
         if (($identificador === 'admin' || strtolower($identificador) === 'admin@email.com') && $password === 'admin') {
             header("Location: administrador.php");
             exit();
@@ -74,7 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_registo'])) {
                     ':password' => $password,
                     ':ultimo_acesso' => $dataAtual
                 ]);
-                // Registo feito com sucesso -> entra diretamente no catálogo
                 header("Location: catalogo.php");
                 exit();
             }
@@ -291,8 +288,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_registo'])) {
         </div>
 
         <div id="seccao-login" class="seccao <?php echo !$mostrarRegisto ? 'ativa' : ''; ?>">
-            <h2 class="titulo-form">Bem-vindo de volta</h2>
-            <p class="subtitulo-form">Inicia sessão para continuares a tua reserva.</p>
+            <h2 class="titulo-form">Bem-vindo!</h2>
+            <p class="subtitulo-form">Inicia sessão para ver o nosso catálogo.</p>
 
             <?php if ($erroLogin): ?>
                 <div class="msg-erro"><?php echo htmlspecialchars($erroLogin); ?></div>
@@ -301,7 +298,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_registo'])) {
             <form method="POST">
                 <input type="hidden" name="acao_login" value="1">
                 <div class="campo-grupo">
-                    <label>Email ou Utilizador</label>
+                    <label>Email ou Nome de Utilizador</label>
                     <input type="text" name="login_email" required placeholder="Insira o seu email ou utilizador">
                 </div>
                 <div class="campo-grupo">
