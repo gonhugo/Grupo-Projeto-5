@@ -5,7 +5,7 @@ $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::F
 
 $imagensOfertas = [
     1  => '../images/hotel_maia.webp',   // Hotel Maia 
-    2  => '../images/The_Vannah.webp',     // Hotel The Vannah
+    2  => '../images/TheVannah.webp',     // Hotel The Vannah
     3  => '../images/Tartarus.webp',       // Hotel Tartarus
     4  => '../images/Citadel.webp',        // Hotel Citadel
     5  => '../images/DelColorado.webp',    // Hotel Del Colorado
