@@ -1,7 +1,6 @@
 <?php
-
 try {
-    $db = new PDO("sqlite:" . __DIR__ . "/scripts/hshotels.db");
+    $db = new PDO("sqlite:" . __DIR__ . "/hshotels.db");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // Se a tabela existir numa versão antiga/incompatível (sem email/password), recria-a
     try {
@@ -18,7 +17,7 @@ $erroLogin = "";
 $erroRegisto = "";
 $mostrarRegisto = false;
 
-
+//LOGIN
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_login'])) {
     $identificador = trim($_POST['login_email'] ?? '');
     $password = trim($_POST['login_pass'] ?? '');
@@ -26,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_login'])) {
     if ($identificador !== '' && $password !== '') {
         // Acesso de administrador (atalho fixo, não fica gravado na tabela utilizadores)
         if (($identificador === 'admin' || strtolower($identificador) === 'admin@email.com') && $password === 'admin') {
-            header("Location: scripts/administrador.php");
+            header("Location: administrador.php");
             exit();
         }
 
@@ -39,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_login'])) {
                 $dataAtual = date('Y-m-d H:i:s');
                 $stmtUpdate = $db->prepare("UPDATE utilizadores SET ultimo_acesso = :ultimo_acesso WHERE id = :id");
                 $stmtUpdate->execute([':ultimo_acesso' => $dataAtual, ':id' => $utilizador['id']]);
-                header("Location: scripts/catalogo.php");
+                header("Location: catalogo.php");
                 exit();
             } else {
                 $erroLogin = "Email/Utilizador ou Password incorretos.";
@@ -52,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_login'])) {
     }
 }
 
-
+//REGISTRO
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_registo'])) {
     $mostrarRegisto = true;
     $nomeCompleto = trim($_POST['nome_completo'] ?? '');
@@ -76,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao_registo'])) {
                     ':ultimo_acesso' => $dataAtual
                 ]);
                 // Registo feito com sucesso -> entra diretamente no catálogo
-                header("Location: scripts/catalogo.php");
+                header("Location: catalogo.php");
                 exit();
             }
         } catch (PDOException $e) {

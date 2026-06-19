@@ -2,9 +2,8 @@
 $db = new PDO("sqlite:" . __DIR__ . "/hshotels.db");
 $ofertas = $db->query("SELECT * FROM ofertas ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
 
-
 $imagensOfertas = [
-    1  => '../images/hotel_maia.webp',   // Hotel Maia 
+    1  => '../images/hotel_maia.webp',   // Hotel Maia
     2  => '../images/TheVannah.webp',     // Hotel The Vannah
     3  => '../images/Tartarus.webp',       // Hotel Tartarus
     4  => '../images/Citadel.webp',        // Hotel Citadel
@@ -34,7 +33,6 @@ $imagensOfertas = [
             background-color: #f0f2f5;
         }
 
-        /* ── HEADER ── */
         .header {
             background-color: #111;
             color: #fff;
@@ -63,7 +61,6 @@ $imagensOfertas = [
         .btn-nav.blue { background: #2196F3; }
         .btn-nav.blue:hover { background: #1565C0; }
 
-        /* ── GRID ── */
         .container {
             max-width: 1300px;
             margin: 40px auto;
@@ -73,7 +70,6 @@ $imagensOfertas = [
             gap: 28px;
         }
 
-        /* ── CARD ── */
         .card {
             background: #fff;
             border-radius: 12px;
@@ -88,7 +84,6 @@ $imagensOfertas = [
             box-shadow: 0 8px 24px rgba(0,0,0,0.13);
         }
 
-        /* ── CARD IMAGE ── */
         .card-img {
             width: 100%;
             height: 200px;
@@ -105,7 +100,6 @@ $imagensOfertas = [
             font-size: 48px;
         }
 
-        /* ── CARD BODY ── */
         .card-body {
             padding: 20px 22px;
             flex: 1;
@@ -113,7 +107,6 @@ $imagensOfertas = [
             flex-direction: column;
         }
 
-        /* Badge: Hotel / Viagem */
         .badge {
             display: inline-block;
             font-size: 11px;
@@ -141,7 +134,6 @@ $imagensOfertas = [
             line-height: 1.5;
         }
 
-        /* ── PRICE BLOCK ── */
         .preco-bloco {
             margin-top: 16px;
             display: flex;
@@ -168,7 +160,6 @@ $imagensOfertas = [
             margin-left: auto;
         }
 
-        /* ── BUTTON ── */
         .btn-reservar {
             display: block;
             margin-top: 18px;
@@ -188,7 +179,6 @@ $imagensOfertas = [
             transform: scale(1.02);
         }
 
-        /* ── EMPTY STATE ── */
         .empty {
             grid-column: 1 / -1;
             text-align: center;
@@ -203,7 +193,7 @@ $imagensOfertas = [
 <div class="header">
     <h1>🏨 HS Hotels</h1>
     <div>
-        <a href="../index.php" class="btn-nav" style="background:#555;">← Início</a>
+        <a href="index.php" class="btn-nav" style="background:#555;">← Início</a>
         <a href="agentemarketing.php" class="btn-nav blue">Marketing</a>
         <a href="administrador.php" class="btn-nav">Admin</a>
     </div>
@@ -221,8 +211,6 @@ $imagensOfertas = [
             $precoAnt = !empty($o['preco_antigo']) ? (float)$o['preco_antigo'] : null;
             $isViagem = stripos($titulo, 'viagem') !== false;
             $imgPath  = $imagensOfertas[$id] ?? null;
-
-            // Calculate discount %
             $desconto = null;
             if ($precoAnt && $precoAnt > $preco) {
                 $desconto = round((1 - $preco / $precoAnt) * 100);
