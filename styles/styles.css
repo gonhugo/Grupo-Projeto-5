@@ -1,6 +1,4 @@
-/* ==========================================================================
-   REGRAS GERAIS E BASE (Seletores Individuais)
-   ========================================================================== */
+
 * { 
     margin: 0; 
     padding: 0; 
@@ -19,9 +17,6 @@ h2, h3 {
     margin-bottom: 15px; 
 }
 
-/* ==========================================================================
-   ESTRUTURA DO HEADER (Seletores Combinados)
-   ========================================================================== */
 header {
     background: white; 
     padding: 15px 30px; 
@@ -49,9 +44,6 @@ header {
     text-decoration: underline;
 }
 
-/* ==========================================================================
-   GRELHAS, LAYOUTS E CAIXAS (Classes)
-   ========================================================================== */
 .grid-catalogo { 
     max-width: 1200px; 
     margin: 0 auto; 
@@ -96,9 +88,6 @@ header {
     margin-bottom: 20px; 
 }
 
-/* ==========================================================================
-   TABELAS (Administrador e Marketing)
-   ========================================================================== */
 table { 
     width: 100%; 
     border-collapse: collapse; 
@@ -117,9 +106,6 @@ th {
     font-weight: bold; 
 }
 
-/* ==========================================================================
-   BOTÕES E FORMULÁRIOS
-   ========================================================================== */
 .btn-add, .btn-ver, .btn-pagar { 
     background-color: #ff1e00; 
     color: white; 
@@ -179,9 +165,6 @@ th {
     color: white;
 }
 
-/* ==========================================================================
-   PREÇOS E CAMPOS DE TEXTO
-   ========================================================================== */
 .box-precos { 
     margin-bottom: 15px; 
 }
@@ -215,7 +198,6 @@ th {
     text-overflow: ellipsis; 
 }
 
-/* Métodos de Pagamento e Comentários */
 .metodos-pagamento { margin-bottom: 25px; }
 .opcao-pagamento { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding: 12px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; }
 .seccao-comentarios { background: #f9f9f9; padding: 20px; border-radius: 6px; margin-bottom: 25px; }
@@ -227,9 +209,6 @@ th {
 .btn-pagar { flex: 2; padding: 14px; font-size: 16px; }
 .btn-cancelar { flex: 1; background-color: #ccc; color: #333; border: none; padding: 14px; border-radius: 4px; font-size: 16px; font-weight: bold; text-align: center; text-decoration: none; }
 
-/* ==========================================================================
-   RESPONSIVIDADE (Telas de Telemóvel)
-   ========================================================================== */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
