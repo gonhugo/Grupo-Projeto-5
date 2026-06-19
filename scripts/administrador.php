@@ -13,6 +13,9 @@ try {
     die("Erro: " . $e->getMessage());
 }
 
+$erro = "";
+$sucesso = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['adicionar_oferta'])) {
         try {
@@ -28,26 +31,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $erro = "Erro: " . $e->getMessage();
         }
     }
-    
-    if (isset($_POST['adicionar_utilizador'])) {
+
+    // Remover utilizador pelo email (a partir do campo de pesquisa no topo da secção)
+    if (isset($_POST['remover_utilizador_email'])) {
         try {
-            $username = trim($_POST['nome_utilizador']);
-            $email = trim($_POST['email_utilizador']);
-            $password = "12345"; 
-            $dataAtual = date('Y-m-d H:i:s');
-            $stmt = $db->prepare("INSERT INTO utilizadores (username, email, password, ultimo_acesso) VALUES (:username, :email, :password, :ultimo_acesso)");
-            $stmt->execute([
-                ':username' => $username,
-                ':email' => $email,
-                ':password' => $password,
-                ':ultimo_acesso' => $dataAtual
-            ]);
-            header("Location: administrador.php"); 
-            exit();
+            $emailRemover = trim($_POST['email_utilizador'] ?? '');
+            if ($emailRemover === '') {
+                $erro = "Indique o email do utilizador a remover.";
+            } else {
+                $stmt = $db->prepare("DELETE FROM utilizadores WHERE email = :email");
+                $stmt->execute([':email' => $emailRemover]);
+                if ($stmt->rowCount() > 0) {
+                    header("Location: administrador.php?removido=1");
+                    exit();
+                } else {
+                    $erro = "Não foi encontrado nenhum utilizador com o email \"" . htmlspecialchars($emailRemover) . "\".";
+                }
+            }
         } catch (PDOException $e) {
-            $erro = "Erro: " . $e->getMessage();
+            $erro = "Erro ao remover utilizador: " . $e->getMessage();
         }
     }
+
+    if (isset($_POST['remover_utilizador_id'])) {
+        try {
+            $stmt = $db->prepare("DELETE FROM utilizadores WHERE id = :id");
+            $stmt->execute([':id' => $_POST['remover_utilizador_id']]);
+            header("Location: administrador.php?removido=1");
+            exit();
+        } catch (PDOException $e) {
+            $erro = "Erro ao remover utilizador: " . $e->getMessage();
+        }
+    }
+}
+
+if (isset($_GET['removido'])) {
+    $sucesso = "Utilizador removido com sucesso.";
 }
 ?>
 <!DOCTYPE html>
@@ -66,11 +85,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .campo-form { padding: 10px; border: 1px solid #ccc; border-radius: 4px; flex: 1; min-width: 180px; font-size: 14px; }
         .btn-adicionar { background-color: #ff1e00; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; transition: background 0.2s; }
         .btn-adicionar:hover { background-color: #cc1800; }
+        .btn-remover-topo { background-color: #e53935; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; transition: background 0.2s; }
+        .btn-remover-topo:hover { background-color: #b71c1c; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #fff; }
         th { background-color: #f8f9fa; font-weight: bold; color: #555; border-bottom: 2px solid #eee; text-align: left; padding: 12px; font-size: 14px; }
         td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; vertical-align: top; }
         tr:hover { background-color: #fdfdfd; }
         .erro-msg { background-color: #ffebee; color: #c62828; padding: 15px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; }
+        .sucesso-msg { background-color: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 4px; margin-bottom: 20px; font-weight: bold; }
+        .btn-remover-linha {
+            background-color: #fff;
+            color: #e53935;
+            border: 1.5px solid #e53935;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn-remover-linha:hover { background-color: #e53935; color: #fff; }
+        form.form-linha { background: none; padding: 0; border: none; margin: 0; display: inline; }
     </style>
 </head>
 <body>
@@ -79,9 +114,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="catalogo.php" style="color: #ff1e00; text-decoration: none; font-weight: bold;">Ir para o Catálogo →</a>
     </div>
     <div class="container">
-        <?php if (isset($erro)): ?>
+        <?php if ($erro): ?>
             <div class="erro-msg"><?php echo $erro; ?></div>
         <?php endif; ?>
+        <?php if ($sucesso): ?>
+            <div class="sucesso-msg"><?php echo $sucesso; ?></div>
+        <?php endif; ?>
+
         <h2>Gestão de Ofertas</h2>
         <form method="POST">
             <input type="hidden" name="adicionar_oferta" value="1">
@@ -123,12 +162,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ?>
             </tbody>
         </table>
+
         <h2>Gestão de Utilizadores</h2>
         <form method="POST">
-            <input type="hidden" name="adicionar_utilizador" value="1">
-            <input type="text" name="nome_utilizador" class="campo-form" placeholder="Username (Nome de Utilizador)" required>
-            <input type="email" name="email_utilizador" class="campo-form" placeholder="Email do Utilizador" required>
-            <button type="submit" class="btn-adicionar" style="background-color: #2196F3;">Adicionar Utilizador</button>
+            <input type="hidden" name="remover_utilizador_email" value="1">
+            <input type="email" name="email_utilizador" class="campo-form" placeholder="Email do Utilizador a remover" required>
+            <button type="submit" class="btn-remover-topo" onclick="return confirm('Tem a certeza que quer remover este utilizador?');">Remover Utilizador</button>
         </form>
         <table>
             <thead>
@@ -136,6 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <th>Nome de Utilizador (Username)</th>
                     <th>Email</th>
                     <th>Último Acesso</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -143,21 +183,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 try {
                     $utilizadores = $db->query("SELECT * FROM utilizadores ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
                     if (empty($utilizadores)) {
-                        echo "<tr><td colspan='3' style='text-align:center; color:#999;'>Nenhum utilizador registado.</td></tr>";
+                        echo "<tr><td colspan='4' style='text-align:center; color:#999;'>Nenhum utilizador registado.</td></tr>";
                     } else {
                         foreach ($utilizadores as $u) {
                             $username = htmlspecialchars($u['username'] ?? 'Sem Nome');
                             $email = htmlspecialchars($u['email'] ?? 'Sem Email');
                             $ultimo = htmlspecialchars($u['ultimo_acesso'] ?? 'Nunca acedeu');
+                            $id = (int)$u['id'];
                             echo "<tr>";
                             echo "<td>{$username}</td>";
                             echo "<td>{$email}</td>";
                             echo "<td><small style='color:#666;'>{$ultimo}</small></td>";
+                            echo "<td>
+                                    <form class='form-linha' method='POST' onsubmit='return confirm(\"Remover {$username}?\");'>
+                                        <input type='hidden' name='remover_utilizador_id' value='{$id}'>
+                                        <button type='submit' class='btn-remover-linha'>🗑 Remover</button>
+                                    </form>
+                                  </td>";
                             echo "</tr>";
                         }
                     }
                 } catch (PDOException $e) {
-                    echo "<tr><td colspan='3' style='color:red;'>Erro ao carregar utilizadores.</td></tr>";
+                    echo "<tr><td colspan='4' style='color:red;'>Erro ao carregar utilizadores.</td></tr>";
                 }
                 ?>
             </tbody>
