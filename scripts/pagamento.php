@@ -1,5 +1,5 @@
 <?php
-// Buscar dados da oferta diretamente da base de dados pelo ?id=
+
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 $oferta = null;
@@ -15,7 +15,6 @@ if ($id > 0) {
     }
 }
 
-// Se não encontrou oferta, redireciona para catálogo
 if (!$oferta) {
     header("Location: catalogo.php");
     exit();
@@ -35,7 +34,6 @@ $isViagem = stripos($oferta['titulo'], 'viagem') !== false;
     <title>Pagamento - <?php echo $titulo; ?> - HS Hotels</title>
     <link rel="stylesheet" href="../styles/styles.css">
     <style>
-        /* Fallback styles caso styles.css não carregue */
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #f0f2f5;
@@ -72,8 +70,6 @@ $isViagem = stripos($oferta['titulo'], 'viagem') !== false;
             font-weight: 600;
             color: #fff;
         }
-
-        /* Detalhes da oferta */
         .detalhes-produto {
             padding: 28px 30px 20px;
             border-bottom: 1px solid #eee;
@@ -125,7 +121,6 @@ $isViagem = stripos($oferta['titulo'], 'viagem') !== false;
         .tipo-hotel  { background: #e8f5e9; color: #2e7d32; }
         .tipo-viagem { background: #e3f2fd; color: #1565c0; }
 
-        /* Comentários */
         .seccao-comentarios {
             padding: 24px 30px;
             border-bottom: 1px solid #eee;
@@ -197,7 +192,6 @@ $isViagem = stripos($oferta['titulo'], 'viagem') !== false;
         }
         .btn-comentar:hover { background: #555; }
 
-        /* Pagamento */
         .seccao-pagamento {
             padding: 24px 30px 30px;
         }
@@ -272,13 +266,11 @@ $isViagem = stripos($oferta['titulo'], 'viagem') !== false;
 
 <div class="container-pagamento">
 
-    <!-- HEADER -->
     <div class="header-pagamento">
         <img src="../images/logotipo.jpg" alt="Logótipo HS Hotels">
         <h2>Resumo da Reserva / Pagamento</h2>
     </div>
 
-    <!-- DETALHES DA OFERTA (dados vindos da BD) -->
     <div class="detalhes-produto">
         <span class="tipo-badge <?php echo $isViagem ? 'tipo-viagem' : 'tipo-hotel'; ?>">
             <?php echo $isViagem ? '✈ Viagem' : '🏨 Hotel'; ?>
@@ -298,7 +290,6 @@ $isViagem = stripos($oferta['titulo'], 'viagem') !== false;
         </div>
     </div>
 
-    <!-- AVALIAÇÕES -->
     <div class="seccao-comentarios">
         <h3>Avaliações de Clientes</h3>
         <div id="lista-comentarios"></div>
@@ -317,7 +308,6 @@ $isViagem = stripos($oferta['titulo'], 'viagem') !== false;
         </div>
     </div>
 
-    <!-- PAGAMENTO -->
     <div class="seccao-pagamento">
         <div class="aviso-total">
             Total a pagar: <strong><?php echo $preco; ?>€</strong> — <?php echo $titulo; ?>
@@ -343,7 +333,6 @@ $isViagem = stripos($oferta['titulo'], 'viagem') !== false;
 </div>
 
 <script>
-    // ID da oferta vindo do PHP (já validado e seguro)
     const idOferta = <?php echo $id; ?>;
     const chaveComentarios = 'comentarios_' + idOferta;
 
